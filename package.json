@@ -1,0 +1,38 @@
+{
+  "name": "markwright",
+  "version": "0.1.0",
+  "description": "Markdown typesetting component for React.",
+  "main": "markwright.js",
+  "author": "Noah Lange <noahrlange@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "watch": "webpack --watch",
+    "build": "webpack",
+    "tslint": "tslint --project .",
+    "dev": "browser-sync start --server public --files 'public/**.*'"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^0.0.4",
+    "@types/react": "^16.0.25",
+    "@types/react-dom": "^16.0.3",
+    "@types/shortid": "^0.0.29",
+    "awesome-typescript-loader": "^3.4.0",
+    "babel-minify-webpack-plugin": "^0.3.0",
+    "browser-sync": "^2.18.13",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "tslint": "^5.8.0",
+    "typescript": "^2.7.2",
+    "webpack": "^3.8.1",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "peerDependencies": {
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1"
+  },
+  "dependencies": {
+    "markdown-it": "^8.4.0",
+    "markdown-it-attrs": "^1.2.1",
+    "shortid": "^2.2.8"
+  }
+}

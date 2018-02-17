@@ -1,9 +1,12 @@
 {
-  "extends": "tslint:recommended",
+  "extends": [  
+    "tslint:latest",
+    "tslint-config-prettier"
+  ],
   "rules": {
     "max-line-length": [true, 80],
+    "no-submodule-imports": [true, "markdown-it/lib/common/utils"],
     "trailing-comma": [ false ],
-    "no-console": [true, "log", "error"],
     "quotemark": [
       true,
       "single",
@@ -11,7 +14,6 @@
       "avoid-escape"
     ],
     "arrow-parens": false,
-    "only-arrow-functions": [ false ],
     "member-ordering": [
       true,
       {

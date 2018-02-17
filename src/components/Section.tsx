@@ -10,25 +10,44 @@ import Content from './Content';
 import Page from './Page';
 import Pages from './Pages';
 
-const FOOTNOTE_RE =
+const FOOTNOTE_REGEX =
   /\s*<div class="footnote footnote-(\d)">([\s\S]*?)<\/div>/gi;
 
 const Stylesheet = ({ id }) => {
-  const styles = `
-    .mw-content-${id} {
-      flow-into: ${id};
-    }
-    .mw-section-${id} .mw-column {
-      flow-from: ${id};
-    }
-  `;
-  return <style type="text/css">{styles}</style>;
+  const into = `.mw-content-${id} { flow-into: ${id}; }`;
+  const from = `.mw-section-${id} .mw-column { flow-from: ${id}; }`
+  return <style type="text/css">{ into + from }</style>;
 };
 
-export default class Section extends React.Component<any, any> {
+interface ISectionProps {
+  /** section index */
+  idx: number;
+  /** pagination start */
+  start: number;
+  /** add page handler */
+  addPage: (idx: number, pages: number) => void;
+  /** section content */
+  content: string;
+  /** section title */
+  title: string;
+}
+
+interface ISectionState {
+  footnotes: object;
+  html: string;
+  md: MarkdownIt.MarkdownIt;
+  pages: number;
+}
+
+/**
+ * Represents a H1-delimeted segment of the main document.
+ */
+export default class Section extends React.Component<
+  ISectionProps,
+  ISectionState
+> {
   public mounted = false;
   public flow = null;
-  public meta = null;
   public id: string = generate().toLowerCase();
   public html: string;
 
@@ -39,24 +58,8 @@ export default class Section extends React.Component<any, any> {
       .use(Attrs)
       .use(Footnote)
       .use(DivFence),
-    meta: {},
     pages: 1
   };
-
-  public stripEscapes(raw: string) {
-    let html = raw;
-    const footnotes = {};
-    let match = FOOTNOTE_RE.exec(raw);
-    while (match !== null) {
-      footnotes[match[1]] = match[2];
-      match = FOOTNOTE_RE.exec(raw);
-    }
-    html = html.replace(
-      FOOTNOTE_RE,
-      (m, i) => `<sup class="footnote-${this.id} footnote-${i}">${i}</sup>`
-    );
-    return { html, footnotes };
-  }
 
   public overset = event => {
     // opverset
@@ -76,7 +79,7 @@ export default class Section extends React.Component<any, any> {
         );
       }
     }
-  };
+  }
 
   public observe = (element: HTMLDivElement) => {
     const mutation = new MutationObserver(m => {
@@ -91,7 +94,22 @@ export default class Section extends React.Component<any, any> {
     if (element) {
       mutation.observe(element, { attributes: true });
     }
-  };
+  }
+
+  public stripEscapes(raw: string) {
+    let html = raw;
+    const footnotes = {};
+    let match = FOOTNOTE_REGEX.exec(raw);
+    while (match !== null) {
+      footnotes[match[1]] = match[2];
+      match = FOOTNOTE_REGEX.exec(raw);
+    }
+    html = html.replace(
+      FOOTNOTE_REGEX,
+      (m, i) => `<sup class="footnote-${this.id} footnote-${i}">${i}</sup>`
+    );
+    return { html, footnotes };
+  }
 
   public generateFootnotes(fns) {
     const footnotes = [];

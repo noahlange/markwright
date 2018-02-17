@@ -5,7 +5,6 @@ export default function divfence(md) {
     const token = tokens[idx];
     const info = token.info ? unescapeAll(token.info).trim() : '';
     let langName;
-    let highlighted;
     let i;
     let tmpAttrs;
     let tmpToken;
@@ -14,21 +13,18 @@ export default function divfence(md) {
       langName = info.split(/\s+/g)[0];
     }
 
-    if (options.highlight) {
-      highlighted =
-        options.highlight(token.content, langName) || escapeHtml(token.content);
-    } else {
-      highlighted = escapeHtml(token.content);
-    }
+    const highlighted = options.highlight
+      ? options.highlight(token.content, langName) || escapeHtml(token.content)
+      : escapeHtml(token.content);
 
     if (info) {
       i = token.attrIndex('class');
       tmpAttrs = token.attrs ? token.attrs.slice() : [];
 
       if (i < 0) {
-        tmpAttrs.push(['class', 'block block-' + langName]);
+        tmpAttrs.push(['class', `block block-${ langName }`]);
       } else {
-        tmpAttrs[i][1] += ' ' + 'block block-' + langName;
+        tmpAttrs[i][1] += ' ' + `block block-${ langName }`;
       }
 
       // Fake token just to render attributes
@@ -37,12 +33,12 @@ export default function divfence(md) {
       };
 
       return (
-        '<div' + slf.renderAttrs(tmpToken) + '>' + highlighted + '</div>\n'
+        `<div${ slf.renderAttrs(tmpToken) }>${ highlighted }</div>\n`
       );
     }
 
     return (
-      `<div class="block ${slf.renderAttrs(token)}">` + highlighted + '</div>\n'
+      `<div class="block ${slf.renderAttrs(token)}">${ highlighted }</div>\n`
     );
   }
 

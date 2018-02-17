@@ -33,7 +33,7 @@ module.exports = [
   },
   {
     output: {
-      path: resolve(__dirname, 'public'),
+      path: resolve(__dirname, 'docs'),
       filename: 'markwright.bundle.js'
     },
     resolve: {

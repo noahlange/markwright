@@ -1,6 +1,6 @@
 {
   "name": "markwright",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Markdown typesetting component for React.",
   "main": "markwright.js",
   "author": "Noah Lange <noahrlange@gmail.com>",
@@ -9,7 +9,7 @@
     "watch": "webpack --watch",
     "build": "webpack",
     "tslint": "tslint --project .",
-    "dev": "browser-sync start --server public --files 'public/**.*'"
+    "dev": "browser-sync start --server docs --files 'public/**.*'"
   },
   "devDependencies": {
     "@types/markdown-it": "^0.0.4",
@@ -33,6 +33,7 @@
   "dependencies": {
     "markdown-it": "^8.4.0",
     "markdown-it-attrs": "^1.2.1",
-    "shortid": "^2.2.8"
+    "shortid": "^2.2.8",
+    "tslint-config-prettier": "^1.8.0"
   }
 }

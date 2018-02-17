@@ -52,9 +52,10 @@ export default function footnote(md: MarkdownIt) {
   }
 
   function render_inline_footnote(tokens, idx, options, env, renderer) {
-    return `<div class="footnote footnote-${tokens[idx].meta.id + 1}">${
-      tokens[idx].content
-    }</div>`;
+    const t = tokens[idx];
+    return (
+      `<div class="footnote footnote-${t.meta.id + 1}">${ t.content }</div>`
+    );
   }
 
   md.renderer.rules.footnote_inline = render_inline_footnote;

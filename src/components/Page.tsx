@@ -3,39 +3,28 @@ import * as React from 'react';
 const Column = () => <div className="mw-column" />;
 const Pagination = ({ num }) => <div className="mw-pagination">{num}</div>;
 const Header = ({ title }) => <div className="mw-header">{ title }</div>;
-
 const Footnote = ({ id, content }) => (
   <div className="mw-footnote">
     <sup>{id}</sup> {content}
   </div>
 );
 
-const Footnotes = ({ footnotes }) => {
+const Body = ({ footnotes }) => {
+  const classnames = `mw-footnotes ${ footnotes.length ? '' : 'mw-empty' }`;
   const notes = footnotes.map(([id, content], idx) => (
     <Footnote key={idx} id={id} content={content} />
   ));
-  return <div className="mw-footnotes">{notes}</div>;
-};
-
-const Body = ({ footnotes }) => {
   return (
     <div className="mw-body">
-      <div className="mw-floats" />
       <div className="mw-contents">
         <Column />
         <div className="mw-column-separator" />
         <Column />
       </div>
-      <Footnotes footnotes={footnotes} />
+      <div className={ classnames }>{notes}</div>
     </div>
   );
 };
-
-const MarginNotes = () => (
-  <div className="mw-margin-notes">
-    <div className="mw-margin-note" />
-  </div>
-);
 
 interface IPageProps {
   num: number;
@@ -65,7 +54,6 @@ export default class Page extends React.Component<IPageProps, any> {
       >
         <Header title={ this.props.title } />
         <Body footnotes={footnotes} />
-        <MarginNotes />
         <Pagination num={this.props.num} />
       </div>
     );

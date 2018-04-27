@@ -12,10 +12,7 @@ export default function divfence(md) {
     if (info) {
       langName = info.split(/\s+/g)[0];
     }
-
-    const highlighted = options.highlight
-      ? options.highlight(token.content, langName) || escapeHtml(token.content)
-      : escapeHtml(token.content);
+    const highlighted = md.render(token.content);
 
     if (info) {
       i = token.attrIndex('class');
@@ -152,7 +149,6 @@ export default function divfence(md) {
 
     return true;
   }
-
   md.renderer.rules.container = render;
   md.block.ruler.before('fence', 'container', fence, {
     alt: ['paragraph', 'reference', 'blockquote', 'list']

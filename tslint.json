@@ -13,6 +13,7 @@
       "jsx-double",
       "avoid-escape"
     ],
+    "interface-name": [ false ],
     "arrow-parens": false,
     "member-ordering": [
       true,

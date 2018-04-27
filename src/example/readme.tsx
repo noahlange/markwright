@@ -1,8 +1,4 @@
-import * as React from 'react';
-import { render } from 'react-dom';
-import Markwright from './components/Markwright';
-
-const content = `# markwright
+export const content =  `# markwright
 A small React library for automagically typesetting Markdown.
 
 ## Peer dependencies
@@ -14,22 +10,24 @@ spec has been dumped by (virtually) all the major browser vendors.
 
 ## Use
 
-It's pretty straightforward.
+\`\`\`bash
+$ yarn add markwright
+\`\`\`
 
 \`\`\`jsx
+import Markwright from 'markwright';
 import * as React from 'react';
 import { render } from 'react-dom';
 
 const root = document.getElementById('root');
-const md =
-  '# SUCH SECTION \\n very content.^[wow!]';
+const md = '# SECTION! \\n very content.^[wow!]';
 const mw = <Markwright content={ md } />;
 
 render(mw, root);
 \`\`\`
 
 ## Styling and HTML structure
-Markwright documents are unstyled, but structured as follows.
+Markwright documents are unstyled, but structured as follows:
 \`\`\`
 .mw                               // document
   .mw-section                     // sections
@@ -46,6 +44,8 @@ Markwright documents are unstyled, but structured as follows.
 
 This allows you to customize the relative position/dimensions of each
 component \`div\` as desired.
+
+{.break}
 
 ## Markdown syntax extensions
 Markwright bundles several Markdown-It extensions for common typesetting
@@ -77,45 +77,17 @@ whatever directly follows the opening triple colons.
 
 \`\`\`
 :::foo
-This will be wrapped in \`.block-foo\`.
+This will be wrapped in \`.block.block-foo\`.
 :::
 \`\`\`
 
 This allows you to more explicitly separate sidebars, &c. from body content.
 `;
 
-export default class Test extends React.Component<any, any> {
-  public state = { content, editor: false };
-
-  public onChange = e => {
-    this.setState({ content: e.target.value });
-  }
-
-  public render() {
-    return (
-      <>
-        <Markwright content={this.state.content} />
-        <div id="editor">
-          <div>
-            <h1>Markwright</h1>
-            <p><strong>Markwright</strong> is a React-powered typesetter for
-            Markdown featuring dynamic document flow, automagical footnotes,
-            section tracking and a variety of other lovely features. While it's
-            absolutely not a replacement for more real typesetting software
-            (e.g., LaTeX), it's easy to use and will work in a pinch for some
-            quick-and-dirty PDF-able document layouts featuring Markdown
-            content.</p>
-            <p>Edit the text area below to dynamically update the content and
-              layout of the README to the left.</p>
-          </div>
-          <textarea
-            value={this.state.content}
-            onChange={this.onChange}
-          />
-        </div>
-      </>
-    );
-  }
-}
-
-render(<Test />, document.getElementById('react-root'));
+export const two = `
+# Oh hi Matthew
+## Oh hi Mark
+## Oh hi Luke
+{.break}
+## Oh hi John
+`;

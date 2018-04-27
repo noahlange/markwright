@@ -1,5 +1,6 @@
 import * as MarkdownIt from 'markdown-it';
 import * as Attrs from 'markdown-it-attrs';
+
 import * as React from 'react';
 import { generate } from 'shortid';
 
@@ -15,8 +16,8 @@ const FOOTNOTE_REGEX =
 
 const Stylesheet = ({ id }) => {
   const into = `.mw-content-${id} { flow-into: ${id}; }`;
-  const from = `.mw-section-${id} .mw-column { flow-from: ${id}; }`
-  return <style type="text/css">{ into + from }</style>;
+  const from = `.mw-section-${id} .mw-column { flow-from: ${id}; }`;
+  return <style type="text/css">{into + from}</style>;
 };
 
 interface ISectionProps {
@@ -33,8 +34,6 @@ interface ISectionProps {
 }
 
 interface ISectionState {
-  footnotes: object;
-  html: string;
   md: MarkdownIt.MarkdownIt;
   pages: number;
 }
@@ -52,9 +51,7 @@ export default class Section extends React.Component<
   public html: string;
 
   public state = {
-    footnotes: {},
-    html: '',
-    md: new MarkdownIt({ html: true, typographer: true })
+    md: new MarkdownIt({ html: true, typographer: true, breaks: true })
       .use(Attrs)
       .use(Footnote)
       .use(DivFence),
@@ -62,7 +59,7 @@ export default class Section extends React.Component<
   };
 
   public overset = event => {
-    // opverset
+    // overset
     if (event.target.overset) {
       this.setState({ pages: this.state.pages + 1 });
       this.props.addPage(this.props.idx, this.state.pages);
@@ -79,7 +76,7 @@ export default class Section extends React.Component<
         );
       }
     }
-  }
+  };
 
   public observe = (element: HTMLDivElement) => {
     const mutation = new MutationObserver(m => {
@@ -94,7 +91,7 @@ export default class Section extends React.Component<
     if (element) {
       mutation.observe(element, { attributes: true });
     }
-  }
+  };
 
   public stripEscapes(raw: string) {
     let html = raw;

@@ -1,5 +1,5 @@
 const { resolve } = require('path');
-const webpack = require('webpack');
+const { DefinePlugin, NamedModulesPlugin, IgnorePlugin } = require('webpack');
 const externals = require('webpack-node-externals');
 const Minify = require('babel-minify-webpack-plugin');
 
@@ -16,10 +16,10 @@ module.exports = [
     },
     externals: [externals()],
     plugins: [
-      new webpack.NamedModulesPlugin(),
+      new NamedModulesPlugin(),
       new Minify({ removeConsole: true }, { comments: false, topLevel: true })
     ],
-    entry: './src/components/Markwright.tsx',
+    entry: './src/markwright/index.tsx',
     target: 'web',
     module: {
       rules: [
@@ -40,12 +40,13 @@ module.exports = [
       extensions: ['.ts', '.tsx', '.js']
     },
     plugins: [
-      new webpack.DefinePlugin({
+      new DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('production')
       }),
-      new Minify({ removeConsole: true }, { comments: false, topLevel: true })
+      new Minify({ removeConsole: true }, { comments: false, topLevel: true }),
+      new IgnorePlugin(/.css$/)
     ],
-    entry: './src/example.tsx',
+    entry: './src/example/index.tsx',
     target: 'web',
     module: {
       rules: [

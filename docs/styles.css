@@ -1,14 +1,4 @@
 :root {
-  --page-height: 11in;
-  --page-width: 8.5in;
-
-  --inner-width: 7in;
-  --inner-height: 8.5in;
-
-  --col-width: 3.5in;
-  --col-height: 8.5in;
-  --col-gutter: 0.25in;
-
   --sans-stack: "Helvetica Neue", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol';
   --mono-stack: 'Fira Code', Inconsolata, monospace;
@@ -30,24 +20,19 @@ html {
   right: 2rem;
 }
 
-#editor > div {
-  margin-bottom: 2rem;
-}
-
 #editor > textarea {
   font-size: 13px;
   font-family: var(--mono-stack);
   flex: 1 0 auto;
   padding: 1rem;
   border: 1px solid lightgrey;
-  border-radius: 3px;
+  box-shadow: 0 0 2px lightgrey inset;
 }
 
 #editor > div > h1 {
   font-size: 5rem;
   padding-bottom: 10px;
   border-bottom: 3px solid black;
-  margin: 0;
 }
 
 #editor > div > p {
@@ -56,153 +41,73 @@ html {
   font-family: var(--sans-stack);
 }
 
-
-.mw .break, .mw-break {
-  break-after: always;
+body > a {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  border: 0;
+  z-index: 100;
 }
 
-.mw-page-column {
-  float: left;
-  margin-right: 1rem;
+@media (max-width: 960px) {
+  #react-root {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .mw {
+    display: block;
+    margin: 0 auto;
+    position: static;
+  }
+  #editor {
+    width: 800px;
+    position: static;
+  }
+  #editor textarea {
+    height: calc(var(--page-width) / 2);
+    width: var(--page-width);
+  }
 }
 
-.mw-page-display {
-  display: flex;
+pre > code {
+	color: white;
+	background: none;
+	font-family: var(--mono-stack);
+	text-align: left;
+	text-shadow: 0 -.1em .2em black;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+  tab-size: 2;
 }
 
-.mw-page-display > div {
-  margin-right: 1rem;
-}
-
-.mw {
-  font-size: 15px;
-  display: table;
-  clear: both;
-  margin-left: 2rem;
-  width: var(--page-width);
-  height: var(--page-height);
-  font-size: 13px;
-}
-
-.mw-page {
-  position: relative;
-  height: var(--page-height);
-  width: var(--page-width);
-  margin: 2rem auto;
+.tabs {
   border: 1px solid lightgrey;
-  border-radius: 3px;
-  background-color: #fff;
-}
-
-.mw-page:nth-child(odd) .mw-header,
-.mw-page:nth-child(odd) .mw-pagination,
-.mw-page:nth-child(odd) .mw-body {
-  right: 0.5in;
-  left: 0.8in;
-}
-
-.mw-page:nth-child(even) .mw-header,
-.mw-page:nth-child(even) .mw-pagination,
-.mw-page:nth-child(even) .mw-body {
-  right: 0.8in;
-  left: 0.5in;
-}
-
-.mw-header {
-  position: absolute;
-  top: 0.5in;
-}
-
-.mw-page:nth-child(odd) .mw-pagination {
-  text-align: left;
-}
-.mw-page:nth-child(even) .mw-pagination {
-  text-align: right;
-}
-
-.mw-pagination {
-  position: absolute;
-  bottom: 0.5in;
-}
-
-.mw-body {
+  border-right-color: transparent;
   display: flex;
-  flex-direction: column;
-  position: absolute;
-  width: var(--inner-width);
-  height: var(--inner-height);
-  top: 1in;
-  bottom: 1in;
+  border-bottom-color: transparent;
 }
 
-.mw-contents {
-  display: flex;
-}
-
-.mw-column {
-  flex-basis: var(--col-width);
-  max-width: var(--col-width);
-  flex-grow: 0;
-  flex-shrink: 0;
-}
-
-.mw-column-separator {
-  min-width: var(--col-gutter);
-  height: 100%;
-}
-
-pre {
-  border-radius: 3px;
-  padding: 1rem;
-  font-size: 9px;
-  color: white;
-  background-color: #222;
-  border: 1px solid black;
-}
-
-pre > code,
-code {
-  font-size: 11px;
-  font-weight: 200;
-  font-family: var(--mono-stack);
-}
-
-.mw :not(pre) > code, .mw a {
+.tabs a {
   color: crimson;
+  flex: 1 0 auto;
+  padding: 0.5rem;
+  font-family: var(--sans-stack);
+  background-color: transparent;
+  font-size: 13px;
+  text-align: center;
+  border-right: 1px solid lightgrey;
+  background-color: white;
 }
 
-.mw-footnotes:not(.mw-empty) {
-  border-top: 1px solid lightgrey;
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
+.tabs a:hover {
+  cursor: pointer;
 }
 
-hr {
-  border: none;
-  border-top: 1px solid lightgrey;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-family: inherit;
-  font-weight: 500;
-  line-height: 1.2;
-  color: inherit;
-}
-
-h1 {
-  font-size: 2.5rem;
-}
-
-h2 {
-  font-size: 1.5rem;
-}
-
-h3 {
-  font-size: 1.25rem;
-}
-
-h4 {
-  font-size: 1rem;
+.tabs a:not(.active) {
+  opacity: 0.65;
+  text-decoration: none;
 }

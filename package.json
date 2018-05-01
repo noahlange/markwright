@@ -8,17 +8,13 @@
   "scripts": {
     "watch": "webpack --watch",
     "build": "webpack",
-    "tslint": "tslint --project .",
-    "dev": "browser-sync start --server docs --files 'docs/**.*'"
+    "lint": "tslint --project ."
   },
   "devDependencies": {
-    "@types/markdown-it": "^0.0.4",
     "@types/react": "^16.0.25",
     "@types/react-dom": "^16.0.4",
-    "@types/shortid": "^0.0.29",
     "awesome-typescript-loader": "^3.4.1",
     "babel-minify-webpack-plugin": "^0.3.0",
-    "browser-sync": "^2.18.13",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "tslint": "^5.8.0",
@@ -32,9 +28,6 @@
     "react-dom": "^16.1.1"
   },
   "dependencies": {
-    "imagesloaded": "^4.1.4",
-    "markdown-it": "^8.4.0",
-    "markdown-it-attrs": "^1.2.1",
-    "shortid": "^2.2.8"
+    "simple-markdown": "^0.4.0"
   }
 }

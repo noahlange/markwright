@@ -15,12 +15,14 @@ export default {
     }
   },
   'mw-block': {
-    match: blockRegex(/^:::(.+)\n(.+)\n:::/),
+    match: blockRegex(/^:::(.+)\n((.|\n)+)\n:::/),
     order: 0,
     parse(capture, recurseParse, state) {
       return {
         block: capture[1],
-        content: recurseParse(capture[2])
+        // hacky hack hack; we need to parse the contents for block-level items,
+        // so we'll wrap it in newlines until the parser's happy
+        content: recurseParse(`\n\n${capture[2]}\n\n`, { inline: false }, state)
       };
     },
     react(node, output) {
@@ -36,9 +38,7 @@ export default {
     match: blockRegex(/^\{\.break\}/),
     order: 0,
     parse(capture, recurseParse, state) {
-      return {
-        content: null
-      };
+      return {};
     },
     react() {
       return <div className="mw-break" />;
@@ -47,7 +47,7 @@ export default {
   'mw-column': divOf('mw-column'),
   'mw-column-separator': {
     react(node, output) {
-      return <div className="mw-column-separator" />;
+      return <div className="mw-column-separator" />;
     }
   },
   'mw-content': divOf('mw-content'),

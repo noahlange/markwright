@@ -3,6 +3,9 @@
 ## 0.x
 Initial development releases.
 
+### 0.4.2
+  - Properly parses colon-fenced blocks.
+
 ### 0.4.1
   - Properly handles section headings in upper margin.
 

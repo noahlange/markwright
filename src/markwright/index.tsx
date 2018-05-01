@@ -1,10 +1,7 @@
 import * as React from 'react';
 import Markwright from './Markwright';
 
-export default class extends React.Component<{
-  content: string;
-  columns?: number;
-}> {
+export default class extends React.Component<{ content: string; }> {
   public state = { flowed: false, regions: [] };
   public render() {
     return (

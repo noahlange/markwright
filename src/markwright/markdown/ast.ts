@@ -20,6 +20,8 @@ import reach from '../utils/reach';
 export default function transformAST(ast, flow: Section[] = []) {
   // first we have to split the parsed content into regions by h1
   let sections: any[] = [];
+  const titles: string[] = []
+
   for (const node of ast) {
     let last = sections[sections.length - 1];
     if (node.type === 'heading' && node.level === 1) {
@@ -30,8 +32,13 @@ export default function transformAST(ast, flow: Section[] = []) {
         type: 'mw-section'
       });
       last = sections[sections.length - 1];
+      titles.push(node.content);
     }
-    last.content.push(node);
+    if (!last) {
+      sections.push({ content: [ node ], id: 1, type: 'mw-section' });
+    } else {
+      last.content.push(node);
+    }
   }
 
   // now that we have our regions, we'll need to split them into pages.
@@ -40,7 +47,7 @@ export default function transformAST(ast, flow: Section[] = []) {
   if (!flow.length) {
     let page = 0;
 
-    sections = sections.map(s => {
+    sections = sections.map((s, i) => {
       page++;
       s.content = makePage(
         page,
@@ -49,7 +56,8 @@ export default function transformAST(ast, flow: Section[] = []) {
           id: `page-${page}-column-1`,
           type: 'mw-column'
         },
-        []
+        [],
+        titles[i]
       );
       return s;
     });
@@ -58,7 +66,8 @@ export default function transformAST(ast, flow: Section[] = []) {
     // pages and columns.
     let page = 1;
 
-    sections = sections.map((s, section) => {
+    sections = sections.map((s, section) => 
+{
       const pages = [];
       const regions: any[][] = [];
       let correspondingNodeIndex = 0;
@@ -85,11 +94,11 @@ export default function transformAST(ast, flow: Section[] = []) {
         }
         // out of nodes for this region
         regions.push(lastRegion);
-        section++;
       }
 
       while (regions.length) {
-        pages.push([regions.shift(), regions.shift()]);
+        // two columns, hardcoded
+        pages.push([ regions.shift(), regions.shift() ]);
       }
 
       s.content = pages.map(nodes => {
@@ -110,11 +119,12 @@ export default function transformAST(ast, flow: Section[] = []) {
               i === 0 ? [b] : [...a, { type: 'mw-column-separator' }, b],
             []
           );
-        return makePage(page++, cols, footnotes);
+        return makePage(page++, cols, footnotes, titles[section]);
       });
 
       return s;
     });
   }
+
   return [{ type: 'mw', content: sections }];
 }

@@ -3,6 +3,12 @@
 ## 0.x
 Initial development releases.
 
+### 0.4.1
+  - Properly handles section headings in upper margin.
+
+### 0.4.0
+  - Complete rewrite using a homebrew layout engine.
+
 ### 0.2.0
   - Empty footnote `div`s now have the `mw-empty` classname.
 

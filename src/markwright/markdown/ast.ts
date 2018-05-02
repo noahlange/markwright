@@ -17,20 +17,24 @@ import reach from '../utils/reach';
  *         .mw-footnotes
  *       .mw-pagination
  */
-export default function transformAST(ast, flow: Section[] = []) {
+export default function transformAST(
+  ast,
+  flow: Section[] = [],
+  columns: number = 2
+) {
   // first we have to split the parsed content into regions by h1
   let sections: any[] = [];
 
   for (const node of ast) {
     let last = sections[sections.length - 1];
     if (node.type === 'heading' && node.level === 1) {
-      if (last && last.title) {
+      if ((last && last.title) || !last) {
         // close current section
         sections.push({
           content: [],
           id: sections.length + 1,
           title: node.content,
-          type: 'mw-section',
+          type: 'mw-section'
         });
         last = sections[sections.length - 1];
       } else if (last) {
@@ -40,9 +44,10 @@ export default function transformAST(ast, flow: Section[] = []) {
 
     if (!last) {
       sections.push({
-        content: [ node ],
+        content: [node],
         id: 1,
-        type: 'mw-section',
+        // title: null,
+        type: 'mw-section'
       });
     } else {
       last.content.push(node);
@@ -74,8 +79,7 @@ export default function transformAST(ast, flow: Section[] = []) {
     // pages and columns.
     let page = 1;
 
-    sections = sections.map((s, section) => 
-{
+    sections = sections.map((s, section) => {
       const pages = [];
       const regions: any[][] = [];
       let correspondingNodeIndex = 0;
@@ -106,25 +110,39 @@ export default function transformAST(ast, flow: Section[] = []) {
 
       while (regions.length) {
         // two columns, hardcoded
-        pages.push([ regions.shift(), regions.shift() ]);
+        const cols = [];
+        for (let col = 0; col < columns; col++) {
+          cols.push(regions.shift());
+        }
+        pages.push(cols);
       }
 
-      s.content = pages.map(nodes => {
+      s.content = pages.map((nodes, p: number) => {
         const footnotes = [];
         let idx = 1;
+        p++; // page number is index + 1
         reach(nodes, node => {
           if (node.type === 'mw-footnote') {
-            node.id = idx++;
+            node.key = `mw-page-${ p }-footnote-${ idx++ }`;
             footnotes.push(node);
             node.inline = true;
           }
         });
         const cols = nodes
           .filter(f => !!f)
-          .map(n => makeCol(n))
+          .map((n, i) => makeCol(`mw-page-${p}-column-${i+1}`, n))
           .reduce(
             (a, b, i) =>
-              i === 0 ? [b] : [...a, { type: 'mw-column-separator' }, b],
+              i === 0
+                ? [b]
+                : [
+                    ...a,
+                    {
+                      id: `mw-page-${p}-column-separator-${i}`,
+                      type: 'mw-column-separator'
+                    },
+                    b
+                  ],
             []
           );
         return makePage(page++, cols, footnotes, s.title);
@@ -134,5 +152,5 @@ export default function transformAST(ast, flow: Section[] = []) {
     });
   }
 
-  return [{ type: 'mw', content: sections }];
+  return [{ type: 'mw', id: 1, content: sections }];
 }

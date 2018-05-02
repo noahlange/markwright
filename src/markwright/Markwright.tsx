@@ -15,16 +15,17 @@ interface ISection {
 interface IMarkwrightProps {
   regions: Section[];
   flowed: boolean;
-  content: string;
+  value: string;
+  columns: number;
   onFlow(a: Section[]): void;
 }
 
 export default class Markwright extends React.Component<IMarkwrightProps, any> {
-  public static react(content: string, regions?: any[]) {
+  public static react(content: string, regions?: any[], columns?: number) {
     const parser = parserFor(rules);
     const tree = parser(content);
     const render = reactFor(ruleOutput(rules, 'react'));
-    return render(ast(tree, regions));
+    return render(ast(tree, regions, columns));
   }
 
   public static heightOf(e: HTMLElement, i: number) {
@@ -41,9 +42,9 @@ export default class Markwright extends React.Component<IMarkwrightProps, any> {
     nextProps: IMarkwrightProps,
     prevState
   ) {
-    if (nextProps.content !== prevState.content) {
+    if (nextProps.value !== prevState.content) {
       return {
-        content: nextProps.content,
+        content: nextProps.value,
         flowed: false,
         regions: []
       };
@@ -77,7 +78,8 @@ export default class Markwright extends React.Component<IMarkwrightProps, any> {
             }
           }
           if (total + heights[current] > height) {
-            current++;
+            // cannot decide if this should be here or not.
+            // current++;
             break;
           } else {
             total += heights[current];
@@ -98,7 +100,7 @@ export default class Markwright extends React.Component<IMarkwrightProps, any> {
   }
 
   public state = {
-    content: this.props.content,
+    content: this.props.value,
     flowed: false,
     regions: []
   };
@@ -119,6 +121,12 @@ export default class Markwright extends React.Component<IMarkwrightProps, any> {
   }
 
   public render() {
-    return Markwright.react(this.state.content, this.state.regions);
+    return (
+      Markwright.react(
+        this.state.content,
+        this.state.regions,
+        this.props.columns
+      )
+    );
   }
 }

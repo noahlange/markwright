@@ -5,6 +5,9 @@ Initial development releases.
 
 ### 0.4.x
 
+#### 0.4.4
+  - addresses `key`-ing issue on some page divs.
+
 #### 0.4.3
   - Greedier blockquotes.
   - Text before the first header would cause the application to crash.

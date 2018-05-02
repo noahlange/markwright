@@ -8,23 +8,23 @@ export default function makePage(
     content: [
       {
         content: header,
-        id: `page-${page}-header`,
+        id: `mw-page-${page}-header`,
         type: 'mw-header'
       },
       {
         content: [
           {
             content: columns,
-            id: `page-${page}-content`,
+            id: `mw-page-${page}-content`,
             type: 'mw-content'
           },
           {
             content: footnotes.map(f => ({ ...f, inline: false })),
-            id: `page-${page}-footnotes`,
+            id: `mw-page-${page}-footnotes`,
             type: 'mw-footnotes'
           }
         ],
-        id: `page-${page}-body`,
+        id: `mw-page-${page}-body`,
         type: 'mw-body'
       }
     ],

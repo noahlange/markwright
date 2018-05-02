@@ -20,22 +20,30 @@ import reach from '../utils/reach';
 export default function transformAST(ast, flow: Section[] = []) {
   // first we have to split the parsed content into regions by h1
   let sections: any[] = [];
-  const titles: string[] = []
 
   for (const node of ast) {
     let last = sections[sections.length - 1];
     if (node.type === 'heading' && node.level === 1) {
-      // close current section
-      sections.push({
-        content: [],
-        id: sections.length + 1,
-        type: 'mw-section'
-      });
-      last = sections[sections.length - 1];
-      titles.push(node.content);
+      if (last && last.title) {
+        // close current section
+        sections.push({
+          content: [],
+          id: sections.length + 1,
+          title: node.content,
+          type: 'mw-section',
+        });
+        last = sections[sections.length - 1];
+      } else if (last) {
+        last.title = node.content;
+      }
     }
+
     if (!last) {
-      sections.push({ content: [ node ], id: 1, type: 'mw-section' });
+      sections.push({
+        content: [ node ],
+        id: 1,
+        type: 'mw-section',
+      });
     } else {
       last.content.push(node);
     }
@@ -57,7 +65,7 @@ export default function transformAST(ast, flow: Section[] = []) {
           type: 'mw-column'
         },
         [],
-        titles[i]
+        s.title
       );
       return s;
     });
@@ -119,7 +127,7 @@ export default function transformAST(ast, flow: Section[] = []) {
               i === 0 ? [b] : [...a, { type: 'mw-column-separator' }, b],
             []
           );
-        return makePage(page++, cols, footnotes, titles[section]);
+        return makePage(page++, cols, footnotes, s.title);
       });
 
       return s;

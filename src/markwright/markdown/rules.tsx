@@ -4,6 +4,10 @@ import divOf from '../utils/divOf';
 
 export default {
   ...defaultRules,
+  blockQuote: {
+    ...defaultRules.blockQuote,
+    match: blockRegex(/^( *>[^\n]+(\n[^\n]+)*\n*)+\n/)
+  },
   heading: {
     ...defaultRules.heading,
     // adjusted so newlines aren't required after headings

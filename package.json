@@ -1,6 +1,6 @@
 {
   "name": "markwright",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Markdown typesetting component for React.",
   "main": "markwright.js",
   "author": "Noah Lange <noahrlange@gmail.com>",

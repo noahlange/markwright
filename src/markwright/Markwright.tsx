@@ -123,7 +123,8 @@ export default class Markwright extends React.Component<IMarkwrightProps, any> {
   public render() {
     return (
       Markwright.react(
-        this.state.content,
+        // @todo - hack to stop the page from disappearing.
+        this.state.content || ' ',
         this.state.regions,
         this.props.columns
       )

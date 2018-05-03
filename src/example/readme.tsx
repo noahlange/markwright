@@ -1,7 +1,7 @@
+/* tslint:disable */
+
 export const content = `# markwright
 A small, single-dependency React library for automagically typesetting Markdown.
-
-## Use
 
 \`\`\`bash
 $ yarn add markwright
@@ -20,30 +20,22 @@ render(mw, root);
 \`\`\`
 
 ## Styling and HTML structure
-If you choose not to use the default stylesheet, you'll need to bring your own
-styling. Follow the general structure of the Markwright document and the CSS as 
-a guide.
+If you choose not to use the default stylesheet, you'll need to bring your own styling. Follow  general structure of the Markwright document and the CSS as a guide.
 
-This lack of prescription allows you to customize the position/dimensions of
-each component \`div\` as desired.
+This lack of prescription allows you to customize the position/dimensions of each component \`div\` as desired.
 
 ## Markdown additions
-A handful of helpful features have been added to the Markdown parser used by
-Markwright. These include footnotes^[wow such footnotes!] and
- blocks^[footnotes on footnotes on footnotes!].
+A handful of helpful features have been added to the Markdown parser used by Markwright. These include footnotes^[wow such footnotes!] and blocks^[footnotes on footnotes on footnotes!].
 
 ### Footnotes
-A generic auto-numbering footnote implementation. They're automatically inserted
-into the containing page's \`.mw-footnotes\` container.
+A generic auto-numbering footnote implementation. They're automatically inserted into the containing page's \`.mw-footnotes\` container.
 
 \`\`\`
 three red panda moons^[are great, by the way].
 \`\`\`
 
 ### Blocks
-Arbitrary \`div\`s can be created using triple colons — \`:::\`. This creates a
-div and applies a \`block block-foo\` class onto the node, where \`foo\` is
-whatever directly follows the opening triple colons.
+Arbitrary \`div\`s can be created using triple colons — \`:::\`. This creates a div and applies a \`block block-foo\` class onto the node, where \`foo\` is whatever directly follows the opening triple colons.
 
 \`\`\`
 :::foo

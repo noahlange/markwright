@@ -1,8 +1,6 @@
 # markwright
 A small, single-dependency React library for automagically typesetting Markdown.
 
-## Use
-
 ```bash
 $ yarn add markwright
 ```
@@ -29,8 +27,7 @@ each component `div` as desired.
 
 ## Markdown additions
 A handful of helpful features have been added to the Markdown parser used by
-Markwright. These include footnotes^[wow such footnotes!] and
- blocks^[footnotes on footnotes on footnotes!].
+Markwright. These include footnotes and content blocks.
 
 ### Footnotes
 A generic auto-numbering footnote implementation. They're automatically inserted

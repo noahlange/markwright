@@ -46,7 +46,6 @@ export default function transformAST(
       sections.push({
         content: [node],
         id: 1,
-        // title: null,
         type: 'mw-section'
       });
     } else {

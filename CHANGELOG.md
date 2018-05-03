@@ -5,6 +5,9 @@ Initial development releases.
 
 ### 0.4.x
 
+#### 0.4.5
+  - removes default "markwright" from header
+
 #### 0.4.4
   - addresses `key`-ing issue on some page divs.
 

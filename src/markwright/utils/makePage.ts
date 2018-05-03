@@ -2,7 +2,7 @@ export default function makePage(
   page: number,
   columns: any | any[],
   footnotes: any[],
-  header: any = { type: 'text', content: 'markwright' }
+  header: any = { type: 'text', content: '' }
 ) {
   return {
     content: [

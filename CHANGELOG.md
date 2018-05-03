@@ -5,6 +5,9 @@ Initial development releases.
 
 ### 0.4.x
 
+#### 0.4.6
+  - fixes layout flow algorithm to include support for collapsing margins
+
 #### 0.4.5
   - removes default "markwright" from header
 

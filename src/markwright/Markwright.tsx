@@ -1,16 +1,10 @@
 import * as React from 'react';
 import { parserFor, reactFor, ruleOutput } from 'simple-markdown';
 
-import ast from './markdown/ast';
-import rules from './markdown/rules';
-
 import Region from './lib/Region';
 import Section from './lib/Section';
-
-interface ISection {
-  title: string;
-  content: string;
-}
+import ast from './markdown/ast';
+import rules from './markdown/rules';
 
 interface IMarkwrightProps {
   regions: Section[];
@@ -28,72 +22,48 @@ export default class Markwright extends React.Component<IMarkwrightProps, any> {
     return render(ast(tree, regions, columns));
   }
 
-  public static heightOf(e: HTMLElement, i: number) {
-    const off = e.offsetHeight;
-    const s = getComputedStyle(e);
-    const l = parseInt(s.marginLeft, 10);
-    const r = parseInt(s.marginRight, 10);
-    const t = parseInt(s.marginTop, 10);
-    const b = parseInt(s.marginBottom, 10);
-    return off + l + t + b + r;
-  }
-
-  public static getDerivedStateFromProps(
-    nextProps: IMarkwrightProps,
-    prevState
-  ) {
-    if (nextProps.value !== prevState.content) {
+  public static getDerivedStateFromProps(props: IMarkwrightProps, state) {
+    if (props.value !== state.content) {
       return {
-        content: nextProps.value,
+        content: props.value,
         flowed: false,
         regions: []
       };
-    } else if (nextProps.flowed) {
-      return { flowed: true, regions: nextProps.regions };
+    } else if (props.flowed) {
+      return { flowed: true, regions: props.regions };
     }
     return null;
   }
 
   public static flow(): Section[] {
     const sections: Section[] = [];
+    // approximate additional height of the footnote block, sans footnotes.
+    const FOOTNOTE_BLOCK_HEIGHT = 48;
     for (const page of document.querySelectorAll('.mw-section')) {
       const section = new Section();
       // should only be one page / column for an unflowed section
       const column = page.querySelector('.mw-column');
+      const height =
+        column.getBoundingClientRect().height - FOOTNOTE_BLOCK_HEIGHT;
       const regions: Region[] = [];
-      const height = column.clientHeight;
-      // sliced are all the HTML elements in the column
-      let sliced: HTMLElement[] = [].slice.call(column.children);
-
-      while (sliced.length) {
-        const heights = sliced.map(Markwright.heightOf);
-        let [total, current] = [0, 0];
-
-        while (total < height) {
-          const node = sliced[current];
-          if (node) {
-            if (node.classList.contains('mw-break')) {
-              current++;
-              break;
-            }
-          }
-          if (total + heights[current] > height) {
-            // cannot decide if this should be here or not.
-            // current++;
-            break;
-          } else {
-            total += heights[current];
-            current++;
+      // sliced are all the HTML elements in our unflowed mega-column
+      const sliced: HTMLElement[] = [].slice.call(column.children);
+      let region = new Region();
+      for (const node of sliced) {
+        if (node.classList.contains('mw-break')) {
+          section.add(region);
+          region = new Region();
+        } else {
+          region.add(node);
+          if (region.height > height) {
+            region.elements.pop();
+            section.add(region);
+            region = new Region();
+            region.add(node);
           }
         }
-        const region = new Region();
-        region.elements = sliced.slice(0, current);
-        if (region.size === 0) {
-          break;
-        }
-        section.regions.push(region);
-        sliced = sliced.slice(current);
       }
+      section.add(region);
       sections.push(section);
     }
     return sections;
@@ -102,13 +72,15 @@ export default class Markwright extends React.Component<IMarkwrightProps, any> {
   public state = {
     content: this.props.value,
     flowed: false,
-    regions: []
+    regions: [],
+    style: `
+      .mw-unflowed .mw-footnote { display: block; }
+    `
   };
 
   public reflow() {
     if (!this.state.flowed) {
-      const r = Markwright.flow();
-      this.props.onFlow(r);
+      this.props.onFlow(Markwright.flow());
     }
   }
 
@@ -122,12 +94,16 @@ export default class Markwright extends React.Component<IMarkwrightProps, any> {
 
   public render() {
     return (
-      Markwright.react(
-        // @todo - hack to stop the page from disappearing.
-        this.state.content || ' ',
-        this.state.regions,
-        this.props.columns
-      )
+      <div className={this.state.flowed ? '' : 'mw-unflowed'}>
+        {/* insert additional styles that should not be overridden */}
+        <style type="text/css">{this.state.style}</style>
+        {Markwright.react(
+          // @todo - hack to stop the page from disappearing.
+          this.state.content || ' ',
+          this.state.regions,
+          this.props.columns
+        )}
+      </div>
     );
   }
 }

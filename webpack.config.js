@@ -1,10 +1,11 @@
 const { resolve } = require('path');
-const { DefinePlugin, NamedModulesPlugin, IgnorePlugin } = require('webpack');
 const externals = require('webpack-node-externals');
-const Minify = require('babel-minify-webpack-plugin');
 
 module.exports = [
   {
+    mode: process.env.NODE_ENV === 'production'
+      ? 'production'
+      : 'development',
     output: {
       path: resolve(__dirname, 'dist'),
       filename: 'markwright.js',
@@ -15,10 +16,7 @@ module.exports = [
       extensions: ['.ts', '.tsx', '.js']
     },
     externals: [externals()],
-    plugins: [
-      new NamedModulesPlugin(),
-      new Minify({ removeConsole: true }, { comments: false, topLevel: true })
-    ],
+    plugins: [],
     entry: './src/markwright/index.tsx',
     target: 'web',
     module: {
@@ -26,12 +24,15 @@ module.exports = [
         {
           test: /\.tsx?/,
           exclude: [],
-          use: ['awesome-typescript-loader']
+          use: ['ts-loader']
         }
       ]
     }
   },
   {
+    mode: process.env.NODE_ENV === 'production'
+      ? 'production'
+      : 'development',
     output: {
       path: resolve(__dirname, 'docs'),
       filename: 'markwright.bundle.js'
@@ -39,13 +40,7 @@ module.exports = [
     resolve: {
       extensions: ['.ts', '.tsx', '.js']
     },
-    plugins: [
-      new DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify('production')
-      }),
-      new Minify({ removeConsole: true }, { comments: false, topLevel: true }),
-      new IgnorePlugin(/.css$/)
-    ],
+    plugins: [],
     entry: './src/example/index.tsx',
     target: 'web',
     module: {
@@ -53,7 +48,7 @@ module.exports = [
         {
           test: /\.tsx?/,
           exclude: [],
-          use: ['awesome-typescript-loader']
+          use: ['ts-loader']
         }
       ]
     }

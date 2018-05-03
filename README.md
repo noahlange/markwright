@@ -1,5 +1,6 @@
 # markwright
-A small, single-dependency React library for automagically typesetting Markdown.
+A small (6.5 KB), single-dependency React library for automagically typesetting
+Markdown documents.
 
 ```bash
 $ yarn add markwright

@@ -7,21 +7,21 @@
   "license": "MIT",
   "scripts": {
     "watch": "webpack --watch",
-    "build": "webpack",
+    "build": "NODE_ENV=production webpack",
     "lint": "tslint --project ."
   },
   "devDependencies": {
     "@types/react": "^16.0.25",
     "@types/react-dom": "^16.0.4",
-    "awesome-typescript-loader": "^3.4.1",
-    "babel-minify-webpack-plugin": "^0.3.0",
+    "ts-loader": "^4.2.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "tslint": "^5.8.0",
     "tslint-config-prettier": "^1.8.0",
     "typescript": "^2.7.2",
-    "webpack": "^3.8.1",
-    "webpack-node-externals": "^1.6.0"
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.1.2",
+    "webpack-node-externals": "^1.7.2"
   },
   "peerDependencies": {
     "react": "^16.1.1",

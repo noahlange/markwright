@@ -6,7 +6,7 @@ const Minify = require('babel-minify-webpack-plugin');
 module.exports = [
   {
     output: {
-      path: __dirname,
+      path: resolve(__dirname, 'dist'),
       filename: 'markwright.js',
       library: 'markwright',
       libraryTarget: 'umd'

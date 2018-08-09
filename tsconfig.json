@@ -3,7 +3,10 @@
     "target": "es2017",
     "module": "es2015",
     "moduleResolution": "node",
-    "jsx": "react"
+    "jsx": "react",
+    // "strict": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true
   },
   "include": [
     "src/**/*.ts"

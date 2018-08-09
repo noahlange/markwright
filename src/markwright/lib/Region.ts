@@ -1,6 +1,3 @@
-import Markwright from '../Markwright';
-
-
 export default class Region {
   public elements: HTMLElement[] = [];
 
@@ -9,8 +6,8 @@ export default class Region {
   }
 
   public get height() {
-    const i = v => parseInt(v, 10);
-    let [ sum, top, bottom ] = [ 0, 0, 0] ;
+    const i = (v: string | null) => v ? parseInt(v, 10) : 0;
+    let [ sum, , bottom ] = [ 0, 0, 0] ;
     for (const node of this.elements) {
       const s = getComputedStyle(node);
       // get margins for current node.
@@ -19,7 +16,6 @@ export default class Region {
       // top margin of the current node. collapsing margins, hooray!
       sum += i(s.height) + Math.max(bottom, m.top);
       bottom = m.bottom;
-      top = m.top;
     }
     return sum;
   }

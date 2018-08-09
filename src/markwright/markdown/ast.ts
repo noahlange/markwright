@@ -1,6 +1,4 @@
-import Region from '../lib/Region';
 import Section from '../lib/Section';
-
 import makeCol from '../utils/makeCol';
 import makePage from '../utils/makePage';
 import reach from '../utils/reach';
@@ -17,8 +15,9 @@ import reach from '../utils/reach';
  *         .mw-footnotes
  *       .mw-pagination
  */
+
 export default function transformAST(
-  ast,
+  ast: any,
   flow: Section[] = [],
   columns: number = 2
 ) {
@@ -59,13 +58,13 @@ export default function transformAST(
   if (!flow.length) {
     let page = 0;
 
-    sections = sections.map((s, i) => {
+    sections = sections.map(s => {
       page++;
       s.content = makePage(
         page,
         {
           content: s.content,
-          id: `page-${page}-column-1`,
+          id: `mw-page-${page}-column-1`,
           type: 'mw-column'
         },
         [],
@@ -79,14 +78,14 @@ export default function transformAST(
     let page = 1;
 
     sections = sections.map((s, section) => {
-      const pages = [];
+      const pages: any[] = [];
       const regions: any[][] = [];
       let correspondingNodeIndex = 0;
 
       // we're attempting to pair AST nodes to DOM elements
       for (const region of flow[section].regions) {
         const lastRegion = [];
-        for (const element of region.elements) {
+        for (const _ of region.elements) {
           let pushedContentfulNode = false;
           while (!pushedContentfulNode) {
             const correspondingNodeFromAST = s.content[correspondingNodeIndex];
@@ -117,21 +116,23 @@ export default function transformAST(
       }
 
       s.content = pages.map((nodes, p: number) => {
-        const footnotes = [];
+        const footnotes: any[] = [];
         let idx = 1;
         p++; // page number is index + 1
-        reach(nodes, node => {
+        reach(nodes, (node: any) => {
           if (node.type === 'mw-footnote') {
-            node.key = `mw-page-${ p }-footnote-${ idx++ }`;
-            footnotes.push(node);
+            node.key = `mw-page-${p}-footnote-${idx++}`;
+            footnotes.push({ ...node });
             node.inline = true;
           }
         });
         const cols = nodes
-          .filter(f => !!f)
-          .map((n, i) => makeCol(`mw-page-${p}-column-${i+1}`, n))
+          .filter(n => !!n)
+          .map((n: any, i: number) =>
+            makeCol(`mw-page-${p}-column-${i + 1}`, n)
+          )
           .reduce(
-            (a, b, i) =>
+            (a: any[], b: any, i: number) =>
               i === 0
                 ? [b]
                 : [

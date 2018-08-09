@@ -1,4 +1,7 @@
-export default function recursiveForEach(node, callback) {
+export default function recursiveForEach(
+  node: any,
+  callback: (node: any) => void
+) {
   if (node) {
     if (Array.isArray(node)) {
       for (const n of node) {

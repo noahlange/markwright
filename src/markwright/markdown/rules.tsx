@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { blockRegex, defaultRules, inlineRegex } from 'simple-markdown';
-import divOf from '../utils/divOf';
+import blockOf from '../utils/blockOf';
 
 export default {
   ...defaultRules,
@@ -10,7 +10,7 @@ export default {
   },
   heading: {
     ...defaultRules.heading,
-    // adjusted so newlines aren't required after headings
+    // adjusted so empty lines aren't required after headings
     match: blockRegex(/^ *(#{1,6}) *([^\n]+?) *#* *(?:\n *)/)
   },
   mw: {
@@ -49,11 +49,11 @@ export default {
       );
     }
   },
-  'mw-body': divOf('mw-body'),
+  'mw-body': blockOf('mw-body'),
   'mw-break': {
     match: blockRegex(/^\{\.break\}/),
     order: 0,
-    parse(capture, recurseParse, state) {
+    parse(_capture, _recurseParse, state) {
       if (!state.breaks) {
         state.breaks = 1;
       }
@@ -63,13 +63,13 @@ export default {
       return <div key={`mw-break-${node.id}`} className="mw-break" />;
     }
   },
-  'mw-column': divOf('mw-column'),
+  'mw-column': blockOf('mw-column'),
   'mw-column-separator': {
-    react(node, output) {
+    react(node) {
       return <div key={node.id} className="mw-column-separator" />;
     }
   },
-  'mw-content': divOf('mw-content'),
+  'mw-content': blockOf('mw-content'),
   'mw-footnote': {
     match: inlineRegex(/^\^\[(.+?)\]/),
     order: defaultRules.link.order - 1,
@@ -84,11 +84,11 @@ export default {
     },
     react(node, output) {
       return node.inline ? (
-        <sup key={`${node.key}-inline`}>{node.id}</sup>
+        <sup key={`${node.id}-inline`}>{node.id}</sup>
       ) : (
-        <div key={node.key} className="mw-footnote">
+        <span key={node.id} className="mw-footnote">
           {node.id}. {output(node.content)}
-        </div>
+        </span>
       );
     }
   },
@@ -104,13 +104,13 @@ export default {
       );
     }
   },
-  'mw-header': divOf('mw-header'),
+  'mw-header': blockOf('mw-header'),
   'mw-page': {
     react(node, output) {
       const even = node.id % 2 ? 'mw-odd' : 'mw-even';
       return (
         <div key={`mw-page-${node.id}`} className={`mw-page ${even}`}>
-          {output(node.content)}
+          <div key={`mw-page-${node.id}-content`}>{output(node.content)}</div>
           <div key={`mw-page-${node.id}-pagination`} className="mw-pagination">
             {node.id}
           </div>

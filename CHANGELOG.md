@@ -3,6 +3,12 @@
 ## 0.x
 Initial development releases.
 
+### 0.5.x
+
+#### 0.5.0
+  - added functioning page breaks (🎉)
+  - fixed some React warnings
+
 ### 0.4.x
 
 #### 0.4.6

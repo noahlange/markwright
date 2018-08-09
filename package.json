@@ -1,33 +1,38 @@
 {
   "name": "markwright",
-  "version": "0.4.5",
+  "version": "0.5.0",
   "description": "Markdown typesetting component for React.",
   "main": "dist/markwright.js",
   "author": "Noah Lange <noahrlange@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "watch": "webpack --watch",
-    "build": "NODE_ENV=production webpack",
-    "lint": "tslint --project ."
+    "pretty": "prettier --write src/**/*",
+    "lint": "tslint --project .",
+    "dev": "webpack-dev-server --config webpack.docs.js",
+    "build:mw": "NODE_ENV=production webpack",
+    "build:docs": "NODE_ENV=production webpack --config webpack.docs.js"
   },
   "devDependencies": {
     "@types/react": "^16.0.25",
     "@types/react-dom": "^16.0.4",
-    "ts-loader": "^4.2.0",
+    "prettier": "^1.14.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "ts-loader": "^4.2.0",
     "tslint": "^5.8.0",
     "tslint-config-prettier": "^1.8.0",
     "typescript": "^2.7.2",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.1.2",
+    "webpack-dev-server": "^3.1.5",
     "webpack-node-externals": "^1.7.2"
   },
   "peerDependencies": {
     "react": "^16.1.1",
-    "react-dom": "^16.1.1"
-  },
-  "dependencies": {
+    "react-dom": "^16.1.1",
     "simple-markdown": "^0.4.0"
+  },
+  "prettier": {
+    "singleQuote": true
   }
 }

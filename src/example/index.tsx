@@ -8,14 +8,16 @@ export default class Test extends React.Component<any, any> {
     content
   };
 
-  public onChange = e => {
-    this.setState({ content: e.target.value });
+  public onChange = k => e => {
+    this.setState({ [k]: e.target.value });
   };
 
   public render() {
     return (
       <>
-        <Markwright value={this.state.content} config={{ columns: 2 }} />
+        <div>
+          <Markwright value={this.state.content} config={{ columns: 2 }} />
+        </div>
         <div id="editor">
           <div>
             <h1>markwright</h1>
@@ -33,7 +35,12 @@ export default class Test extends React.Component<any, any> {
               layout of the README to the left.
             </p>
           </div>
-          <textarea value={this.state.content} onChange={this.onChange} />
+          <div id="editors">
+            <textarea
+              value={this.state.content}
+              onChange={this.onChange('content')}
+            />
+          </div>
         </div>
       </>
     );

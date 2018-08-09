@@ -1,22 +1,22 @@
-const { resolve, join } = require('path');
-const externals = require('webpack-node-externals');
+const { join } = require('path');
 
 module.exports = {
   mode: process.env.NODE_ENV === 'production'
     ? 'production'
     : 'development',
+  devServer: {
+    contentBase: join(__dirname, './docs'),
+    port: 8080
+  },
   output: {
-    path: resolve(__dirname, 'dist'),
-    filename: 'markwright.js',
-    library: 'markwright',
-    libraryTarget: 'umd'
+    path: join(__dirname, './docs'),
+    filename: 'markwright.bundle.js'
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js']
   },
-  externals: [externals()],
   plugins: [],
-  entry: './src/markwright/index.tsx',
+  entry: './src/example/index.tsx',
   target: 'web',
   module: {
     rules: [

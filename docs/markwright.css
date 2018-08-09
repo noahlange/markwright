@@ -170,7 +170,7 @@ pre {
 pre > code,
 code {
   font-size: 10px;
-  font-weight: 200;
+  font-weight: 300;
   font-family: var(--mono-stack);
 }
 

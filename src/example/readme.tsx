@@ -1,7 +1,7 @@
 /* tslint:disable */
 
 export const content = `# markwright
-A small (6.5 KB), single-dependency React library for automagically typesetting Markdown documents.
+A small (6.5 KB), minimal-dependency React library for automagically typesetting Markdownesque documents.
 
 \`\`\`bash
 $ yarn add markwright
@@ -44,4 +44,7 @@ This will be wrapped in \`.block.block-foo\`.
 \`\`\`
 
 This allows you to more explicitly separate sidebars, &c. from body content.
+
+### Breaks
+\`{.break}\` will insert a column break in content.
 `;

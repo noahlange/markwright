@@ -6,23 +6,24 @@ import Section from './lib/Section';
 import ast from './markdown/ast';
 import rules from './markdown/rules';
 
-interface IMarkwrightProps {
+type MarkwrightProps = {
   regions: Section[];
   flowed: boolean;
   value: string;
   columns: number;
   onFlow(a: Section[]): void;
-}
+};
 
-export default class Markwright extends React.Component<IMarkwrightProps, any> {
+export default class Markwright extends React.Component<MarkwrightProps, any> {
   public static react(content: string, regions?: any[], columns?: number) {
     const parser = parserFor(rules);
     const tree = parser(content);
-    const render = reactFor(ruleOutput(rules, 'react'));
+    const output = ruleOutput(rules, 'react');
+    const render = reactFor(output);
     return render(ast(tree, regions, columns));
   }
 
-  public static getDerivedStateFromProps(props: IMarkwrightProps, state) {
+  public static getDerivedStateFromProps(props: MarkwrightProps, state) {
     if (props.value !== state.content) {
       return {
         content: props.value,
@@ -43,28 +44,30 @@ export default class Markwright extends React.Component<IMarkwrightProps, any> {
       const section = new Section();
       // should only be one page / column for an unflowed section
       const column = page.querySelector('.mw-column');
-      const height =
-        column.getBoundingClientRect().height - FOOTNOTE_BLOCK_HEIGHT;
-      const regions: Region[] = [];
-      // sliced are all the HTML elements in our unflowed mega-column
-      const sliced: HTMLElement[] = [].slice.call(column.children);
-      let region = new Region();
-      for (const node of sliced) {
-        if (node.classList.contains('mw-break')) {
-          section.add(region);
-          region = new Region();
-        } else {
-          region.add(node);
-          if (region.height > height) {
-            region.elements.pop();
+      if (column) {
+        const height =
+          column.getBoundingClientRect().height - FOOTNOTE_BLOCK_HEIGHT;
+        // sliced are all the HTML elements in our unflowed mega-column
+        const sliced: HTMLElement[] = [].slice.call(column.children);
+        let region = new Region();
+        for (const node of sliced) {
+          if (node.classList.contains('mw-break')) {
             section.add(region);
             region = new Region();
             region.add(node);
+          } else {
+            region.add(node);
+            if (region.height > height) {
+              region.elements.pop();
+              section.add(region);
+              region = new Region();
+              region.add(node);
+            }
           }
         }
+        section.add(region);
+        sections.push(section);
       }
-      section.add(region);
-      sections.push(section);
     }
     return sections;
   }

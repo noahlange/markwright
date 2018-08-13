@@ -3,6 +3,13 @@
 ## 0.x
 Initial development releases.
 
+#### 0.6.x
+
+#### 0.6.0
+  - removed `mw-` styles
+  - added `manual` page mode config option
+  - added `highlight` option for syntax highlighting
+
 ### 0.5.x
 
 #### 0.5.0

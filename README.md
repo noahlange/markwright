@@ -1,5 +1,5 @@
 # markwright
-A small (6.5 KB), minimal-dependency React library for automagically typesetting
+A small (7 KB), minimal-dependency React library for automagically typesetting
 Markdownesque documents.
 
 ```bash
@@ -32,7 +32,7 @@ Markwright. These include footnotes and content blocks.
 
 ### Footnotes
 A generic auto-numbering footnote implementation. They're automatically inserted
-into the containing page's `.mw-footnotes` container.
+into the containing page's `.footnotes` container.
 
 ```
 three red panda moons^[are great, by the way].
@@ -40,12 +40,12 @@ three red panda moons^[are great, by the way].
 
 ### Blocks
 Arbitrary `div`s can be created using triple colons — `:::`. This creates a
-div and applies a `block block-foo` class onto the node, where `foo` is
+div and applies a `block foo` class onto the node, where `foo` is
 whatever directly follows the opening triple colons.
 
 ```
 :::foo
-This will be wrapped in `.block.block-foo`.
+This will be wrapped in `.block.foo`.
 :::
 ```
 

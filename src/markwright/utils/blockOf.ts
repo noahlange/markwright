@@ -5,7 +5,7 @@ export default function divOf(str: string, tag: string = 'div') {
     react(node, output, state) {
       return React.createElement(tag, {
         children: output(node.content),
-        className: str,
+        className: str.replace('mw-', ''),
         key: node.id || state.key
       });
     }

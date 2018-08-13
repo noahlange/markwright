@@ -1,4 +1,4 @@
-const { resolve, join } = require('path');
+const { resolve } = require('path');
 const externals = require('webpack-node-externals');
 
 module.exports = {

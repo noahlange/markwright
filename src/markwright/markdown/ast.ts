@@ -7,13 +7,13 @@ import reach from '../utils/reach';
  * returns a modified abstract syntax tree more closely representing the final
  * output instead of the markdown document
  * .mw
- *   .mw-section
- *     .mw-page
- *       .mw-header
- *       .mw-body
- *         .mw-content
- *         .mw-footnotes
- *       .mw-pagination
+ *   .section
+ *     .page
+ *       .header
+ *       .body
+ *         .content
+ *         .footnotes
+ *       .pagination
  */
 
 export default function transformAST(

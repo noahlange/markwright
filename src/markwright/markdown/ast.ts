@@ -60,16 +60,18 @@ export default function transformAST(
 
     sections = sections.map(s => {
       page++;
-      s.content = makePage(
-        page,
-        {
-          content: s.content,
-          id: `mw-page-${page}-column-1`,
-          type: 'mw-column'
-        },
-        [],
-        s.title
-      );
+      s.content = [
+        makePage(
+          page,
+          {
+            content: s.content,
+            id: `mw-page-${page}-column-1`,
+            type: 'mw-column'
+          },
+          [],
+          s.title
+        )
+      ];
       return s;
     });
   } else {
@@ -152,5 +154,5 @@ export default function transformAST(
     });
   }
 
-  return [{ type: 'mw', id: 1, content: sections }];
+  return sections;
 }

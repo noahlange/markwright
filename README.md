@@ -1,5 +1,5 @@
 # markwright
-A small (7 KB), minimal-dependency React library for automagically typesetting
+A small (8 KB), minimal-dependency React library for automagically typesetting
 Markdownesque documents.
 
 ```bash

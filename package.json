@@ -1,6 +1,6 @@
 {
   "name": "markwright",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Markdown typesetting component for React.",
   "main": "dist/markwright.js",
   "author": "Noah Lange <noahrlange@gmail.com>",
@@ -17,8 +17,11 @@
     "@types/react": "^16.0.25",
     "@types/react-dom": "^16.0.4",
     "prettier": "^1.14.2",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
+    "react-promise": "^2.0.3",
+    "simple-markdown": "^0.4.1",
+    "react-virtualized": "^9.20.1",
     "ts-loader": "^4.2.0",
     "tslint": "^5.8.0",
     "tslint-config-prettier": "^1.8.0",
@@ -31,8 +34,9 @@
   "peerDependencies": {
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
+    "react-promise": "^2.0.3",
     "simple-markdown": "^0.4.1",
-    "react-promise": "^2.0.3"
+    "react-virtualized": "^9.20.1"
   },
   "prettier": {
     "singleQuote": true

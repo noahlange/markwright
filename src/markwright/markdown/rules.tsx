@@ -128,7 +128,7 @@ export default ({ highlight }) => {
           node.content && node.content.length ? '' : 'empty'
         }`;
         return (
-          <div key={node.id} className={str}>
+          <div key={`mw-footnote-${node.id}`} className={str}>
             {output(node.content)}
           </div>
         );
@@ -143,13 +143,12 @@ export default ({ highlight }) => {
             key={`mw-page-${node.id}`}
             className={`page page-${node.id} ${even}`}
           >
-            <div key={`mw-page-${node.id}-content`}>{output(node.content)}</div>
-            <div
-              key={`mw-page-${node.id}-pagination`}
-              className="pagination"
-            >
-              {node.id}
-            </div>
+            <>
+              {output(node.content)}
+              <div key={`mw-page-${node.id}-pagination`} className="pagination">
+                {node.id}
+              </div>
+            </>
           </div>
         );
       }
@@ -166,7 +165,7 @@ export default ({ highlight }) => {
     paragraph: {
       ...defaultRules.paragraph,
       react(node, output, state) {
-        return <p key={state.key}>{output(node.content)}</p>;
+        return <p key={`p-${state.key}`}>{output(node.content)}</p>;
       }
     }
   };

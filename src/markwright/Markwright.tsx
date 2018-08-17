@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { List } from 'react-virtualized';
 import { parserFor, reactFor, ruleOutput } from 'simple-markdown';
 
 import Region from './lib/Region';
 import Section from './lib/Section';
-import ast from './markdown/ast';
+import modifyAST from './markdown/ast';
 import rules from './markdown/rules';
 
 type HighlightFn = (content: string, lang: string) => Promise<string>;
@@ -15,8 +16,27 @@ type MarkwrightProps = {
   flowed: boolean;
   value: string;
   columns: number;
+  page?: {
+    width: number;
+    height: number;
+  };
   onFlow(a: Section[]): void;
 };
+
+function pageRenderer(sections, r) {
+  const output = ruleOutput(r, 'react');
+  const render = reactFor(output);
+  return ({ key, index, style }) => {
+    let count = 0;
+    const section = sections.find(s => (count += s.content.length) > index);
+    const page = section.content[index - count + section.content.length];
+    return (
+      <div key={key} style={style}>
+        {render(page)}
+      </div>
+    );
+  };
+}
 
 export default class Markwright extends React.Component<MarkwrightProps, any> {
   public static ref: HTMLDivElement;
@@ -26,14 +46,25 @@ export default class Markwright extends React.Component<MarkwrightProps, any> {
     content: string,
     regions?: any[],
     columns?: number,
-    highlight?: HighlightFn
+    highlight?: HighlightFn,
+    page?: { width: number; height: number }
   ) {
     const r = this.rules ? this.rules : (this.rules = rules({ highlight }));
     const parser = parserFor(r);
     const tree = parser(content);
-    const output = ruleOutput(r, 'react');
-    const render = reactFor(output);
-    return render(ast(tree, regions, columns));
+    const sections = modifyAST(tree, regions, columns);
+    const pages = sections.reduce((a, b) => a + b.content.length, 0) || 1;
+    return (
+      <div className="section">
+        <List
+          width={page.width}
+          height={page.height}
+          rowHeight={page.height}
+          rowCount={pages}
+          rowRenderer={pageRenderer(sections, r)}
+        />
+      </div>
+    );
   }
 
   public static getDerivedStateFromProps(props: MarkwrightProps, state) {
@@ -49,11 +80,11 @@ export default class Markwright extends React.Component<MarkwrightProps, any> {
     return null;
   }
 
-  public static flow(advanced?: boolean): Section[] {
+  public static flow(manual?: boolean): Section[] {
     const sections: Section[] = [];
     // approximate additional height of the footnote block, sans footnotes.
     const FOOTNOTE_BLOCK_HEIGHT = 48;
-    for (const page of this.ref.querySelectorAll('.section')) {
+    for (const page of this.ref.querySelectorAll('.page')) {
       const section = new Section();
       // should only be one page / column for an unflowed section
       const column = page.querySelector('.column') as HTMLElement;
@@ -70,7 +101,7 @@ export default class Markwright extends React.Component<MarkwrightProps, any> {
             region.add(node);
           } else {
             region.add(node);
-            if (!advanced && region.height > height) {
+            if (!manual && region.height > height) {
               region.elements.pop();
               section.add(region);
               region = new Region();
@@ -121,7 +152,8 @@ export default class Markwright extends React.Component<MarkwrightProps, any> {
           this.state.content || ' ',
           this.state.regions,
           this.props.columns,
-          this.props.highlight
+          this.props.highlight,
+          this.props.page
         )}
       </div>
     );

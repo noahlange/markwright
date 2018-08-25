@@ -20,8 +20,8 @@
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-promise": "^2.0.3",
-    "simple-markdown": "^0.4.1",
     "react-virtualized": "^9.20.1",
+    "simple-markdown": "^0.4.1",
     "ts-loader": "^4.2.0",
     "tslint": "^5.8.0",
     "tslint-config-prettier": "^1.8.0",
@@ -35,8 +35,8 @@
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-promise": "^2.0.3",
-    "simple-markdown": "^0.4.1",
-    "react-virtualized": "^9.20.1"
+    "react-virtualized": "^9.20.1",
+    "simple-markdown": "^0.4.1"
   },
   "prettier": {
     "singleQuote": true

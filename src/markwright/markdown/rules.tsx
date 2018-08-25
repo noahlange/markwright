@@ -1,6 +1,10 @@
 import * as React from 'react';
 import Async from 'react-promise';
-import { blockRegex, defaultRules, inlineRegex } from 'simple-markdown';
+import {
+  blockRegex,
+  defaultRules,
+  inlineRegex
+} from 'simple-markdown';
 
 import blockOf from '../utils/blockOf';
 
@@ -96,7 +100,7 @@ export default ({ highlight }) => {
     'mw-column': blockOf('mw-column'),
     'mw-column-separator': {
       react(node) {
-        return <div key={node.id} className="column-separator" />;
+        return <hr key={node.id} className="column-separator" />;
       }
     },
     'mw-content': blockOf('mw-content'),
@@ -156,7 +160,10 @@ export default ({ highlight }) => {
     'mw-section': {
       react(node, output) {
         return (
-          <div key={`mw-section-${node.id}`} className="section">
+          <div
+            key={`mw-section-${node.id}`}
+            className={`section section-${node.id}`}
+          >
             {output(node.content)}
           </div>
         );

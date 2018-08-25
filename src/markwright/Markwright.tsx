@@ -23,7 +23,7 @@ type MarkwrightProps = {
   onFlow(a: Section[]): void;
 };
 
-function pageRenderer(sections, r) {
+function pageRenderer(paper, sections, r) {
   const output = ruleOutput(r, 'react');
   const render = reactFor(output);
   return ({ key, index, style }) => {
@@ -31,7 +31,15 @@ function pageRenderer(sections, r) {
     const section = sections.find(s => (count += s.content.length) > index);
     const page = section.content[index - count + section.content.length];
     return (
-      <div key={key} style={style}>
+      <div
+        key={key}
+        style={{
+          ...style,
+          left: (window.innerWidth - paper.width) / 2,
+          marginBottom: 32,
+          top: style.top + 64,
+        }}
+      >
         {render(page)}
       </div>
     );
@@ -54,14 +62,16 @@ export default class Markwright extends React.Component<MarkwrightProps, any> {
     const tree = parser(content);
     const sections = modifyAST(tree, regions, columns);
     const pages = sections.reduce((a, b) => a + b.content.length, 0) || 1;
+    const width = this.ref ? this.ref.clientWidth : window.innerWidth;
+    const height = this.ref ? this.ref.clientHeight : window.innerHeight;
     return (
       <div className="section">
         <List
-          width={page.width}
-          height={page.height}
-          rowHeight={page.height}
+          width={width}
+          height={height}
+          rowHeight={page.height + 64}
           rowCount={pages}
-          rowRenderer={pageRenderer(sections, r)}
+          rowRenderer={pageRenderer(page, sections, r)}
         />
       </div>
     );

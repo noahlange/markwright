@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 import Markwright from '../markwright';
 import { content } from './readme';
@@ -8,7 +8,7 @@ export default class Test extends React.Component<any, any> {
     content
   };
 
-  public onChange = k => e => {
+  public onChange = (k: $AnyFixMe) => (e: React.ChangeEvent<$AnyFixMe>) => {
     this.setState({ [k]: e.target.value });
   };
 

@@ -2,30 +2,30 @@
   "name": "markwright",
   "version": "0.7.0",
   "description": "Markdown typesetting component for React.",
-  "main": "dist/markwright.js",
+  "main": "dist/bundle.js",
   "author": "Noah Lange <noahrlange@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "pretty": "prettier --write src/**/*",
+    "pretty": "prettier --write 'src/**/*.{ts,tsx}' 'dist/bundle.js'",
     "lint": "tslint --project .",
-    "dev": "webpack-dev-server --config webpack.docs.js",
+    "dev": "webpack-dev-server",
+    "types": "tsc",
+    "build": "NODE_ENV=production rollup -c rollup.config.js",
     "watch:mw": "webpack --watch",
-    "build:mw": "NODE_ENV=production webpack",
-    "build:docs": "NODE_ENV=production webpack --config webpack.docs.js"
+    "build:docs": "NODE_ENV=production webpack"
   },
   "devDependencies": {
     "@types/react": "^16.0.25",
     "@types/react-dom": "^16.0.4",
     "prettier": "^1.14.2",
-    "react": "^16.1.1",
-    "react-dom": "^16.1.1",
-    "react-promise": "^2.0.3",
-    "react-virtualized": "^9.20.1",
-    "simple-markdown": "^0.4.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-typescript": "^1.0.0",
     "ts-loader": "^4.2.0",
     "tslint": "^5.8.0",
     "tslint-config-prettier": "^1.8.0",
-    "typescript": "^2.7.2",
+    "typescript": "^3.3.3",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.1.2",
     "webpack-dev-server": "^3.1.5",
@@ -33,12 +33,14 @@
   },
   "peerDependencies": {
     "react": "^16.1.1",
-    "react-dom": "^16.1.1",
-    "react-promise": "^2.0.3",
-    "react-virtualized": "^9.20.1",
-    "simple-markdown": "^0.4.1"
+    "react-dom": "^16.1.1"
   },
   "prettier": {
     "singleQuote": true
+  },
+  "dependencies": {
+    "react-promise": "^2.0.3",
+    "rollup": "^1.1.2",
+    "simple-markdown": "^0.4.1"
   }
 }

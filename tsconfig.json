@@ -2,13 +2,14 @@
   "compilerOptions": {
     "target": "es2017",
     "module": "es2015",
+    "noEmit": true,
     "moduleResolution": "node",
     "jsx": "react",
-    // "strict": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true
   },
-  "include": [
-    "src/**/*.ts"
-  ]
+  "include": ["src/**/*"]
 }

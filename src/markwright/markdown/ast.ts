@@ -16,28 +16,34 @@ import reach from '../utils/reach';
  *       .pagination
  */
 
+function isHeadingNode(n: IASTNode): n is IHeadingNode {
+  return n.type === 'heading';
+}
+
 export default function transformAST(
-  ast: any,
+  ast: IASTNode[],
   flow: Section[] = [],
   columns: number = 2
 ) {
   // first we have to split the parsed content into regions by h1
-  let sections: any[] = [];
+  let sections: ISectionNode[] = [];
 
   for (const node of ast) {
     let last = sections[sections.length - 1];
-    if (node.type === 'heading' && node.level === 1) {
-      if ((last && last.title) || !last) {
-        // close current section
-        sections.push({
-          content: [],
-          id: sections.length + 1,
-          title: node.content,
-          type: 'mw-section'
-        });
-        last = sections[sections.length - 1];
-      } else if (last) {
-        last.title = node.content;
+    if (isHeadingNode(node)) {
+      if (node.level === 1) {
+        if ((last && last.title) || !last) {
+          // close current section
+          sections.push({
+            content: [],
+            id: sections.length + 1,
+            title: node.content,
+            type: 'mw-section'
+          });
+          last = sections[sections.length - 1];
+        } else if (last) {
+          last.title = node.content;
+        }
       }
     }
 
@@ -80,8 +86,8 @@ export default function transformAST(
     let page = 1;
 
     sections = sections.map((s, section) => {
-      const pages: any[] = [];
-      const regions: any[][] = [];
+      const pages: $AnyFixMe[] = [];
+      const regions: $AnyFixMe[][] = [];
       let correspondingNodeIndex = 0;
 
       // we're attempting to pair AST nodes to DOM elements
@@ -117,11 +123,11 @@ export default function transformAST(
         pages.push(cols);
       }
 
-      s.content = pages.map((nodes, p: number) => {
-        const footnotes: any[] = [];
+      s.content = pages.map((nodes: $AnyFixMe[], p: number) => {
+        const footnotes: $AnyFixMe[] = [];
         let idx = 1;
         p++; // page number is index + 1
-        reach(nodes, (node: any) => {
+        reach(nodes, (node: $AnyFixMe) => {
           if (node.type === 'mw-footnote') {
             node.key = `mw-page-${p}-footnote-${idx++}`;
             footnotes.push({ ...node });
@@ -130,11 +136,11 @@ export default function transformAST(
         });
         const cols = nodes
           .filter(n => !!n)
-          .map((n: any, i: number) =>
+          .map((n: $AnyFixMe, i: number) =>
             makeCol(`mw-page-${p}-column-${i + 1}`, n)
           )
           .reduce(
-            (a: any[], b: any, i: number) =>
+            (a: $AnyFixMe[], b: $AnyFixMe, i: number) =>
               i === 0
                 ? [b]
                 : [

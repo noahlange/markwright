@@ -1,8 +1,8 @@
 export default function makePage(
   page: number,
-  columns: any | any[],
-  footnotes: any[],
-  header: any = { type: 'text', content: '' }
+  columns: $AnyFixMe | $AnyFixMe[],
+  footnotes: $AnyFixMe[],
+  header: IASTNode[] = [{ type: 'text', content: [] }]
 ) {
   return {
     content: [

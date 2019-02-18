@@ -1,4 +1,5 @@
 # Code of Reasonable Conduct
+
 This document provides community guidelines for a safe, respectful, productive,
 and collaborative place for any person who is willing to contribute to this
 development community. It applies to all "collaborative spaces", defined as
@@ -13,7 +14,7 @@ constitute harassment with respect to these characteristics will not be
 tolerated.
 
 Furthermore, contributors shall be tolerant of differing or opposing views and
-assume best the intentions of others. 
+assume best the intentions of others.
 
 This document is adapted from the Opal community's
 [conduct guidelines](https://github.com/opal/opal/blob/master/CONDUCT.md) and

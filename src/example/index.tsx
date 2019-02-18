@@ -1,24 +1,33 @@
-import * as React from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 import Markwright from '../markwright';
-import { content } from './readme';
+import content from './readme';
+import styles from './styles';
 
 export default class Test extends React.Component<any, any> {
   public state = {
     content
   };
 
-  public onChange = k => e => {
+  public onChange = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ [k]: e.target.value });
   };
 
   public render() {
     return (
       <>
-        <div>
-          <Markwright value={this.state.content} config={{ columns: 2 }} />
-        </div>
-        <div id="editor">
+        <style type="text/css">
+          {styles(
+            {
+              columns: 1,
+              manual: true
+            },
+            8.5,
+            11
+          )}
+        </style>
+        <Markwright value={this.state.content} config={{ columns: 1 }} />
+        {/* <div id="editor">
           <div>
             <h1>markwright</h1>
             <p>
@@ -41,7 +50,7 @@ export default class Test extends React.Component<any, any> {
               onChange={this.onChange('content')}
             />
           </div>
-        </div>
+        </div> */}
       </>
     );
   }

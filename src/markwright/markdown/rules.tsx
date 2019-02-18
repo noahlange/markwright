@@ -1,14 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import Async from 'react-promise';
-import {
-  blockRegex,
-  defaultRules,
-  inlineRegex
-} from 'simple-markdown';
+import { blockRegex, defaultRules, inlineRegex } from 'simple-markdown';
 
+import { HighlightFn } from '../Markwright';
 import blockOf from '../utils/blockOf';
 
-export default ({ highlight }) => {
+export default ({ highlight }: { highlight?: HighlightFn }) => {
   return {
     ...defaultRules,
     blockQuote: {
@@ -17,7 +14,7 @@ export default ({ highlight }) => {
     },
     codeBlock: {
       ...defaultRules.codeBlock,
-      react(node, _, state) {
+      react(node: $AnyFixMe, _: $AnyFixMe, state: $AnyFixMe) {
         const content = highlight
           ? highlight(node.content, node.lang)
           : Promise.resolve(node.content);
@@ -48,7 +45,7 @@ export default ({ highlight }) => {
       match: blockRegex(/^ *(#{1,6}) *([^\n]+?) *#* *(?:\n *)/)
     },
     mw: {
-      react(node, output) {
+      react(node: $AnyFixMe, output: $AnyFixMe) {
         return (
           <div className="mw" key={`mw-${node.id}`}>
             {output(node.content)}
@@ -59,7 +56,7 @@ export default ({ highlight }) => {
     'mw-block': {
       match: blockRegex(/^ *(:{3,}) *(\S+)? *\n([\s\S]+?)\s*\1 *(?:\n *)+\n/),
       order: 0,
-      parse(capture, recurseParse, state) {
+      parse(capture: $AnyFixMe, recurseParse: $AnyFixMe, state: $AnyFixMe) {
         if (!state.blocks) {
           state.blocks = 1;
         }
@@ -75,7 +72,7 @@ export default ({ highlight }) => {
           id: state.blocks++
         };
       },
-      react(node, output) {
+      react(node: $AnyFixMe, output: $AnyFixMe) {
         return (
           <div key={node.id} className={`block ${node.block}`}>
             {output(node.content)}
@@ -87,19 +84,19 @@ export default ({ highlight }) => {
     'mw-break': {
       match: blockRegex(/^\{\.break\}/),
       order: 0,
-      parse(_capture, _recurseParse, state) {
+      parse(_capture: $AnyFixMe, _recurseParse: $AnyFixMe, state: $AnyFixMe) {
         if (!state.breaks) {
           state.breaks = 1;
         }
         return { id: state.breaks++ };
       },
-      react(node) {
+      react(node: $AnyFixMe) {
         return <div key={`mw-break-${node.id}`} className="break" />;
       }
     },
     'mw-column': blockOf('mw-column'),
     'mw-column-separator': {
-      react(node) {
+      react(node: $AnyFixMe) {
         return <hr key={node.id} className="column-separator" />;
       }
     },
@@ -107,7 +104,7 @@ export default ({ highlight }) => {
     'mw-footnote': {
       match: inlineRegex(/^\^\[(.+?)\]/),
       order: defaultRules.link.order - 1,
-      parse(capture, recurseParse, state) {
+      parse(capture: $AnyFixMe, recurseParse: $AnyFixMe, state: $AnyFixMe) {
         if (!state.footnotes) {
           state.footnotes = 1;
         }
@@ -116,7 +113,7 @@ export default ({ highlight }) => {
           id: state.footnotes++
         };
       },
-      react(node, output) {
+      react(node: $AnyFixMe, output: $AnyFixMe) {
         return node.inline ? (
           <sup key={`${node.id}-inline`}>{node.id}</sup>
         ) : (
@@ -127,7 +124,7 @@ export default ({ highlight }) => {
       }
     },
     'mw-footnotes': {
-      react(node, output) {
+      react(node: $AnyFixMe, output: $AnyFixMe) {
         const str = `footnotes ${
           node.content && node.content.length ? '' : 'empty'
         }`;
@@ -140,7 +137,7 @@ export default ({ highlight }) => {
     },
     'mw-header': blockOf('mw-header'),
     'mw-page': {
-      react(node, output) {
+      react(node: $AnyFixMe, output: $AnyFixMe) {
         const even = node.id % 2 ? 'odd' : 'even';
         return (
           <div
@@ -158,7 +155,7 @@ export default ({ highlight }) => {
       }
     },
     'mw-section': {
-      react(node, output) {
+      react(node: $AnyFixMe, output: $AnyFixMe) {
         return (
           <div
             key={`mw-section-${node.id}`}
@@ -171,7 +168,7 @@ export default ({ highlight }) => {
     },
     paragraph: {
       ...defaultRules.paragraph,
-      react(node, output, state) {
+      react(node: $AnyFixMe, output: $AnyFixMe, state: $AnyFixMe) {
         return <p key={`p-${state.key}`}>{output(node.content)}</p>;
       }
     }

@@ -1,6 +1,6 @@
 /* tslint:disable */
 
-export const content = `# markwright
+export default `# markwright
 A small (6.5 KB), minimal-dependency React library for automagically typesetting Markdownesque documents.
 
 \`\`\`bash
@@ -9,7 +9,7 @@ $ yarn add markwright
 
 \`\`\`jsx
 import Markwright from 'markwright';
-import * as React from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 
 const root = document.getElementById('root');
@@ -23,6 +23,8 @@ render(mw, root);
 If you choose not to use the default stylesheet, you'll need to bring your own styling. Follow  general structure of the Markwright document and the CSS as a guide.
 
 This lack of prescription allows you to customize the position/dimensions of each component \`div\` as desired.
+
+{.break}
 
 ## Markdown additions
 A handful of helpful features have been added to the Markdown parser used by Markwright. These include footnotes^[wow such footnotes!] and blocks^[footnotes on footnotes on footnotes!].

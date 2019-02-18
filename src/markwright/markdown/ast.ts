@@ -17,12 +17,12 @@ import reach from '../utils/reach';
  */
 
 export default function transformAST(
-  ast: any,
+  ast: AnyNode[],
   flow: Section[] = [],
   columns: number = 2
-) {
+): ISectionNode[] {
   // first we have to split the parsed content into regions by h1
-  let sections: any[] = [];
+  let sections: ISectionNode[] = [];
 
   for (const node of ast) {
     let last = sections[sections.length - 1];
@@ -31,7 +31,7 @@ export default function transformAST(
         // close current section
         sections.push({
           content: [],
-          id: sections.length + 1,
+          id: `${sections.length + 1}`,
           title: node.content,
           type: 'mw-section'
         });
@@ -44,7 +44,7 @@ export default function transformAST(
     if (!last) {
       sections.push({
         content: [node],
-        id: 1,
+        id: '1',
         type: 'mw-section'
       });
     } else {
@@ -63,11 +63,13 @@ export default function transformAST(
       s.content = [
         makePage(
           page,
-          {
-            content: s.content,
-            id: `mw-page-${page}-column-1`,
-            type: 'mw-column'
-          },
+          [
+            {
+              content: s.content,
+              id: `mw-page-${page}-column-1`,
+              type: 'mw-column'
+            }
+          ],
           [],
           s.title
         )
@@ -80,10 +82,10 @@ export default function transformAST(
     let page = 1;
 
     sections = sections.map((s, section) => {
-      const pages: any[] = [];
-      const regions: any[][] = [];
-      let correspondingNodeIndex = 0;
+      const pages: AnyNode[][] = [];
+      const regions: $AnyFixMe[][] = [];
 
+      let correspondingNodeIndex = 0;
       // we're attempting to pair AST nodes to DOM elements
       for (const region of flow[section].regions) {
         const lastRegion = [];
@@ -110,7 +112,7 @@ export default function transformAST(
 
       while (regions.length) {
         // two columns, hardcoded
-        const cols = [];
+        const cols: $AnyFixMe[] = [];
         for (let col = 0; col < columns; col++) {
           cols.push(regions.shift());
         }
@@ -118,35 +120,30 @@ export default function transformAST(
       }
 
       s.content = pages.map((nodes, p: number) => {
-        const footnotes: any[] = [];
+        const footnotes: IFootnoteNode[] = [];
         let idx = 1;
         p++; // page number is index + 1
-        reach(nodes, (node: any) => {
+        reach(nodes, node => {
           if (node.type === 'mw-footnote') {
             node.key = `mw-page-${p}-footnote-${idx++}`;
             footnotes.push({ ...node });
             node.inline = true;
           }
         });
-        const cols = nodes
+
+        const sep = (i: number): IColSeparatorNode => ({
+          content: [],
+          id: `mw-page-${p}-column-separator-${i}`,
+          type: 'mw-column-separator'
+        });
+
+        const cols: Array<IColNode | IColSeparatorNode> = nodes
           .filter(n => !!n)
-          .map((n: any, i: number) =>
-            makeCol(`mw-page-${p}-column-${i + 1}`, n)
-          )
-          .reduce(
-            (a: any[], b: any, i: number) =>
-              i === 0
-                ? [b]
-                : [
-                    ...a,
-                    {
-                      id: `mw-page-${p}-column-separator-${i}`,
-                      type: 'mw-column-separator'
-                    },
-                    b
-                  ],
-            []
-          );
+          .map((n, i) => makeCol(`mw-page-${p}-column-${i + 1}`, n))
+          .reduce((a, b, i) => (i === 0 ? [b] : [...a, sep(i), b]), [] as Array<
+            IColNode | IColSeparatorNode
+          >);
+
         return makePage(page++, cols, footnotes, s.title);
       });
 

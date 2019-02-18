@@ -1,9 +1,9 @@
 export default function makePage(
   page: number,
-  columns: any | any[],
-  footnotes: any[],
-  header: any = { type: 'text', content: '' }
-) {
+  columns: Array<IColNode | IColSeparatorNode>,
+  footnotes: INode[],
+  header: INode[] = [{ type: 'text', content: [] }]
+): INode {
   return {
     content: [
       {
@@ -28,7 +28,7 @@ export default function makePage(
         type: 'mw-body'
       }
     ],
-    id: page,
+    id: `${page}`,
     type: 'mw-page'
   };
 }

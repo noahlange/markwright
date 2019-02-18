@@ -6,8 +6,8 @@ export default class Region {
   }
 
   public get height() {
-    const i = (v: string | null) => v ? parseInt(v, 10) : 0;
-    let [ sum, bottom ] = [ 0, 0 ] ;
+    const i = (v: string | null) => (v ? parseInt(v, 10) : 0);
+    let [sum, bottom] = [0, 0];
     for (const node of this.elements) {
       const { height } = node.getBoundingClientRect();
       const s = getComputedStyle(node);

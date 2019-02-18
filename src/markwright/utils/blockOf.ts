@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 
 export default function divOf(str: string, tag: string = 'div') {
   return {
-    react(node, output, state) {
+    react(node: $AnyFixMe, output: $AnyFixMe, state: $AnyFixMe) {
       return React.createElement(tag, {
         children: output(node.content),
         className: str.replace('mw-', ''),

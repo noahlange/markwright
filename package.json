@@ -3,12 +3,13 @@
   "version": "0.7.0",
   "description": "Markdown typesetting component for React.",
   "main": "dist/markwright.js",
+  "types": "types/markwright/index.d.ts",
   "author": "Noah Lange <noahrlange@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "pretty": "prettier --write 'src/**/*.{ts,tsx}'",
+    "pretty": "prettier --write '{src,types}/**/*.{ts,tsx}'",
     "lint": "tslint --project .",
-    "types": "tsc --noEmit",
+    "types": "tsc",
     "start": "webpack-dev-server --config webpack.docs.js",
     "docs": "NODE_ENV=production webpack --config webpack.docs.js",
     "build": "NODE_ENV=production rollup -c rollup.config.js"

@@ -8,7 +8,9 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "noUnusedParameters": true,
-    "noUnusedLocals": true
-  },
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+    "noUnusedLocals": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "types"
+  }
 }

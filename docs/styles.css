@@ -4,6 +4,13 @@
   --mono-stack: 'Fira Code', 'Fira Mono', Inconsolata, monospace;
 }
 
+::-webkit-scrollbar-track,
+::-webkit-scrollbar,
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
 html {
   font-family: var(--sans-stack);
   font-weight: 300;
@@ -23,7 +30,6 @@ body > a {
 
 #react-root {
   display: flex;
-  margin: 0.5in auto;
   width: 100%;
   justify-content: space-around;
 }

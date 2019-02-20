@@ -8,18 +8,25 @@ interface IMarkwrightConfig {
     height: number;
   };
   highlight?: (str: string, language: string) => Promise<string>;
+  virtualized?: boolean;
 }
-declare type MarkwrightState = {
+declare type MarkwrightEntryState = {
   flowed?: boolean;
   regions: Section[];
 };
+declare type MarkwrightEntryProps = {
+  value: string;
+  page?: number;
+  context?: object;
+  config?: IMarkwrightConfig;
+  container?: Partial<{
+    height: number;
+    width: number;
+  }>;
+};
 export default class extends React.Component<
-  {
-    value: string;
-    page?: number;
-    config?: IMarkwrightConfig;
-  },
-  MarkwrightState
+  MarkwrightEntryProps,
+  MarkwrightEntryState
 > {
   state: {
     flowed: boolean;

@@ -55,7 +55,7 @@ export default function styles<T extends typeof defaults>(
     }
     
     .page {
-      font-family: var(--font-sans);
+      font-family: var(--sans-stack);
       font-size: 15px;
       overflow: hidden;
       position: relative;

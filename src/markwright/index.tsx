@@ -11,20 +11,28 @@ interface IMarkwrightConfig {
     height: number;
   };
   highlight?: (str: string, language: string) => Promise<string>;
+  virtualized?: boolean;
 }
 
-type MarkwrightState = {
+type MarkwrightEntryState = {
   flowed?: boolean;
   regions: Section[];
 };
 
+type MarkwrightEntryProps = {
+  value: string;
+  page?: number;
+  context?: object;
+  config?: IMarkwrightConfig;
+  container?: Partial<{
+    height: number;
+    width: number;
+  }>;
+};
+
 export default class extends React.Component<
-  {
-    value: string;
-    page?: number;
-    config?: IMarkwrightConfig;
-  },
-  MarkwrightState
+  MarkwrightEntryProps,
+  MarkwrightEntryState
 > {
   public state = { flowed: false, regions: [] };
 
@@ -48,9 +56,18 @@ export default class extends React.Component<
   }
 
   public render() {
+    const container = {
+      ...{
+        height: window.innerHeight,
+        width: 96 * 8.5
+      },
+      ...(this.props.container || {})
+    };
     return (
       <Markwright
         value={this.props.value}
+        context={this.props.context || {}}
+        container={container}
         page={this.config('page', { width: 96 * 8.5, height: 96 * 11 })}
         manual={this.config('manual', true)}
         columns={
@@ -59,6 +76,7 @@ export default class extends React.Component<
         highlight={this.config('highlight')}
         flowed={this.state.flowed}
         regions={this.state.regions}
+        virtualized
         onFlow={r => this.setState({ flowed: true, regions: r })}
       />
     );

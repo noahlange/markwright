@@ -84,10 +84,11 @@ export default function transformAST(
     sections = sections.map((s, section) => {
       const pages: AnyNode[][] = [];
       const regions: $AnyFixMe[][] = [];
+      const flowSection = flow[section] || { regions: [] };
 
       let correspondingNodeIndex = 0;
       // we're attempting to pair AST nodes to DOM elements
-      for (const region of flow[section].regions) {
+      for (const region of flowSection.regions) {
         const lastRegion = [];
         for (const _ of region.elements) {
           let pushedContentfulNode = false;

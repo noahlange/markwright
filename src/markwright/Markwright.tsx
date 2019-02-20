@@ -1,3 +1,4 @@
+import fde from 'fast-deep-equal';
 import React from 'react';
 import { FixedSizeList as List } from 'react-window';
 import { parserFor, reactFor, ruleOutput } from 'simple-markdown';
@@ -10,13 +11,18 @@ import rules from './markdown/rules';
 export type HighlightFn = (content: string, lang: string) => Promise<string>;
 
 type MarkwrightProps = {
+  context: object;
   manual?: boolean;
   virtualized?: boolean;
-  regions: Section[];
+  regions: Region[];
   highlight?: HighlightFn;
   flowed: boolean;
   value: string;
   columns: number;
+  container: {
+    height: number;
+    width: number;
+  };
   page: {
     width: number;
     height: number;
@@ -26,6 +32,9 @@ type MarkwrightProps = {
 
 type MarkwrightState = {
   content: string;
+  context: object;
+  containerHeight: number;
+  containerWidth: number;
   flowed: boolean;
   regions: Region[];
   style: string;
@@ -41,9 +50,7 @@ function pageRenderer(sections: ISectionNode[], r: $AnyFixMe) {
       const page = section.content[index - count + section.content.length];
       const top = style.top ? +style.top : 0;
       return (
-        <div style={{ ...style, top: top + (index + 1) * 32 }}>
-          {render(page)}
-        </div>
+        <div style={{ ...style, top: top + index * 32 }}>{render(page)}</div>
       );
     }
     return <div />;
@@ -55,48 +62,26 @@ export default class Markwright extends React.Component<
   MarkwrightState
 > {
   public static ref: HTMLDivElement | null;
-  public static rules: $AnyFixMe;
 
-  public static react(
+  public static render(
     content: string,
-    page?: { width: number; height: number },
-    regions?: $AnyFixMe[],
-    columns?: number,
-    highlight?: HighlightFn
-  ) {
-    const r = Markwright.rules || (Markwright.rules = rules({ highlight }));
-    const parser = parserFor(r);
-    const tree = parser(content);
-    const sections = modifyAST(tree, regions, columns);
-    const output = ruleOutput(r, 'react');
-    const render = reactFor(output);
-    return (
-      <div className="section" style={{ width: page ? page.width : undefined }}>
-        {render(sections)}
-      </div>
-    );
-  }
-
-  public static reactVirtualized(
-    content: string,
+    context: object,
     page: { width: number; height: number },
+    container: { width: number; height: number },
     regions?: Section[],
     columns?: number,
     highlight?: HighlightFn
   ) {
-    const r = Markwright.rules || (Markwright.rules = rules({ highlight }));
+    const r = rules({ highlight, context });
     const parser = parserFor(r);
     const tree = parser(content);
     const sections = modifyAST(tree, regions, columns);
     const pages = sections.reduce((a, b) => a + b.content.length, 0) || 1;
-    const height = Markwright.ref
-      ? Markwright.ref.clientHeight
-      : window.innerHeight;
     return (
-      <div className="section" style={{ width: page.width }}>
+      <div className="sections" style={{ width: page.width }}>
         <List
-          width={page.width}
-          height={height}
+          width={container.width}
+          height={container.height}
           itemSize={page.height}
           itemCount={pages}
         >
@@ -110,16 +95,29 @@ export default class Markwright extends React.Component<
     props: MarkwrightProps,
     state: MarkwrightState
   ) {
-    if (props.value !== state.content) {
-      return {
-        content: props.value,
-        flowed: false,
-        regions: []
-      };
-    } else if (props.flowed) {
-      return { flowed: true, regions: props.regions };
+    const next: Partial<MarkwrightState> = {};
+
+    if (!fde(props.context, state.context)) {
+      next.context = props.context;
     }
-    return null;
+    if (
+      props.container.width !== state.containerWidth ||
+      props.container.height !== state.containerHeight
+    ) {
+      next.containerHeight = props.container.height;
+      next.containerWidth = props.container.width;
+    }
+
+    if (props.value !== state.content) {
+      next.content = props.value;
+      next.flowed = false;
+      next.regions = [];
+    } else if (props.flowed) {
+      next.flowed = true;
+      next.regions = props.regions;
+    }
+
+    return Object.keys(next).length ? { ...state, ...next } : null;
   }
 
   public static flow(manual?: boolean): Section[] {
@@ -160,7 +158,10 @@ export default class Markwright extends React.Component<
   }
 
   public state = {
+    containerHeight: this.props.container.height,
+    containerWidth: this.props.container.width,
     content: this.props.value,
+    context: this.props.context,
     flowed: false,
     regions: [],
     style: `
@@ -183,10 +184,6 @@ export default class Markwright extends React.Component<
   }
 
   public render() {
-    const render = this.props.virtualized
-      ? Markwright.reactVirtualized
-      : Markwright.react;
-
     return (
       <div
         className={this.state.flowed ? '' : 'unflowed'}
@@ -194,10 +191,14 @@ export default class Markwright extends React.Component<
       >
         {/* insert additional styles that should not be overridden */}
         <style type="text/css">{this.state.style}</style>
-        {(render as $AnyFixMe).call(
-          Markwright,
+        {Markwright.render(
           this.state.content || ' ',
+          this.state.context,
           this.props.page,
+          {
+            height: this.state.containerHeight,
+            width: this.state.containerWidth
+          },
           this.state.regions,
           this.props.columns,
           this.props.highlight

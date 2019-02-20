@@ -4,8 +4,15 @@ import { blockRegex, defaultRules, inlineRegex } from 'simple-markdown';
 
 import { HighlightFn } from '../Markwright';
 import blockOf from '../utils/blockOf';
+import { get } from '../utils/get';
 
-export default ({ highlight }: { highlight?: HighlightFn }) => {
+export default ({
+  highlight,
+  context
+}: {
+  highlight?: HighlightFn;
+  context: object;
+}) => {
   return {
     ...defaultRules,
     blockQuote: {
@@ -170,6 +177,17 @@ export default ({ highlight }: { highlight?: HighlightFn }) => {
       ...defaultRules.paragraph,
       react(node: $AnyFixMe, output: $AnyFixMe, state: $AnyFixMe) {
         return <p key={`p-${state.key}`}>{output(node.content)}</p>;
+      }
+    },
+    variable: {
+      match: inlineRegex(/^{{\s*((?:\w|\.)+)\s*}}/),
+      order: defaultRules.em.order,
+      parse(capture: $AnyFixMe) {
+        const name = capture[1];
+        return { content: name, type: 'variable' };
+      },
+      react(node: $AnyFixMe, _output: $AnyFixMe, state: $AnyFixMe) {
+        return <span key={state.key}>{get(context, node.content)}</span>;
       }
     }
   };

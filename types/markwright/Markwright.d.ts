@@ -6,13 +6,18 @@ export declare type HighlightFn = (
   lang: string
 ) => Promise<string>;
 declare type MarkwrightProps = {
+  context: object;
   manual?: boolean;
   virtualized?: boolean;
-  regions: Section[];
+  regions: Region[];
   highlight?: HighlightFn;
   flowed: boolean;
   value: string;
   columns: number;
+  container: {
+    height: number;
+    width: number;
+  };
   page: {
     width: number;
     height: number;
@@ -21,6 +26,9 @@ declare type MarkwrightProps = {
 };
 declare type MarkwrightState = {
   content: string;
+  context: object;
+  containerHeight: number;
+  containerWidth: number;
   flowed: boolean;
   regions: Region[];
   style: string;
@@ -30,20 +38,14 @@ export default class Markwright extends React.Component<
   MarkwrightState
 > {
   static ref: HTMLDivElement | null;
-  static rules: $AnyFixMe;
-  static react(
+  static render(
     content: string,
-    page?: {
+    context: object,
+    page: {
       width: number;
       height: number;
     },
-    regions?: $AnyFixMe[],
-    columns?: number,
-    highlight?: HighlightFn
-  ): JSX.Element;
-  static reactVirtualized(
-    content: string,
-    page: {
+    container: {
       width: number;
       height: number;
     },
@@ -54,21 +56,21 @@ export default class Markwright extends React.Component<
   static getDerivedStateFromProps(
     props: MarkwrightProps,
     state: MarkwrightState
-  ):
-    | {
-        content: string;
-        flowed: boolean;
-        regions: never[];
-      }
-    | {
-        flowed: boolean;
-        regions: Section[];
-        content?: undefined;
-      }
-    | null;
+  ): {
+    content: string;
+    context: object;
+    containerHeight: number;
+    containerWidth: number;
+    flowed: boolean;
+    regions: Region[];
+    style: string;
+  } | null;
   static flow(manual?: boolean): Section[];
   state: {
+    containerHeight: number;
+    containerWidth: number;
     content: string;
+    context: object;
     flowed: boolean;
     regions: never[];
     style: string;

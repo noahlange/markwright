@@ -1,6 +1,9 @@
 /* tslint:disable */
 
 export default `# markwright
+
+## {{ author.name }}
+
 A small (6.5 KB), minimal-dependency React library for automagically typesetting Markdownesque documents.
 
 \`\`\`bash

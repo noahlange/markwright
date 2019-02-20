@@ -1,15 +1,15 @@
 {
   "name": "markwright",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Markdown typesetting component for React.",
   "main": "dist/markwright.js",
   "types": "types/markwright/index.d.ts",
   "author": "Noah Lange <noahrlange@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "pretty": "prettier --write '{src,types}/**/*.{ts,tsx}'",
+    "pretty": "prettier --write '{src,types,dist}/**/*.{js,ts,tsx}'",
     "lint": "tslint --project .",
-    "types": "tsc",
+    "types": "tsc --emitDeclarationOnly",
     "start": "webpack-dev-server --config webpack.docs.js",
     "docs": "NODE_ENV=production webpack --config webpack.docs.js",
     "build": "NODE_ENV=production rollup -c rollup.config.js"
@@ -18,6 +18,8 @@
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
     "@types/react-window": "^1.5.1",
+    "@types/lodash": "^4.14.121",
+    "lodash": "^4.17.11",
     "prettier": "^1.14.2",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
@@ -33,14 +35,16 @@
     "webpack": "^4.6.0",
     "webpack-cli": "^2.1.2",
     "webpack-dev-server": "^3.1.5",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "fast-deep-equal": "^2.0.1"
   },
   "peerDependencies": {
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-promise": "^2.0.3",
     "react-window": "^1.5.1",
-    "simple-markdown": "^0.4.1"
+    "simple-markdown": "^0.4.1",
+    "fast-deep-equal": "^2.0.1"
   },
   "prettier": {
     "singleQuote": true

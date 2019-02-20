@@ -1,2 +1,4 @@
 node_modules
+docs/types
+src/example/types
 types/example

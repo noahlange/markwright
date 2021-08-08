@@ -1,10 +1,6 @@
 import * as React from 'react';
 import Async from 'react-promise';
-import {
-  blockRegex,
-  defaultRules,
-  inlineRegex
-} from 'simple-markdown';
+import { blockRegex, defaultRules, inlineRegex } from 'simple-markdown';
 
 import blockOf from '../utils/blockOf';
 

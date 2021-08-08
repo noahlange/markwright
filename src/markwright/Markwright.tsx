@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { List } from 'react-virtualized';
-import { parserFor, reactFor, ruleOutput } from 'simple-markdown';
+// @ts-ignore
+import { ruleOutput, parserFor, reactFor } from 'simple-markdown';
 
 import Region from './lib/Region';
 import Section from './lib/Section';
@@ -37,7 +38,7 @@ function pageRenderer(paper, sections, r) {
           ...style,
           left: (window.innerWidth - paper.width) / 2,
           marginBottom: 32,
-          top: style.top + 64,
+          top: style.top + 64
         }}
       >
         {render(page)}

@@ -6,7 +6,7 @@
   "author": "Noah Lange <noahrlange@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "pretty": "prettier --write src/**/*",
+    "pretty": "prettier --write 'src/**/*'",
     "lint": "tslint --project .",
     "dev": "webpack-dev-server --config webpack.docs.js",
     "watch:mw": "webpack --watch",
@@ -21,14 +21,14 @@
     "react-dom": "^16.1.1",
     "react-promise": "^2.0.3",
     "react-virtualized": "^9.20.1",
-    "simple-markdown": "^0.4.1",
+    "simple-markdown": "^0.7.3",
     "ts-loader": "^4.2.0",
     "tslint": "^5.8.0",
     "tslint-config-prettier": "^1.8.0",
     "typescript": "^2.7.2",
-    "webpack": "^4.6.0",
-    "webpack-cli": "^2.1.2",
-    "webpack-dev-server": "^3.1.5",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.2",
     "webpack-node-externals": "^1.7.2"
   },
   "peerDependencies": {
@@ -36,9 +36,11 @@
     "react-dom": "^16.1.1",
     "react-promise": "^2.0.3",
     "react-virtualized": "^9.20.1",
-    "simple-markdown": "^0.4.1"
+    "simple-markdown": "^0.7.3"
   },
   "prettier": {
-    "singleQuote": true
+    "singleQuote": true,
+    "trailingComma": "none",
+    "arrowParens": "avoid"
   }
 }

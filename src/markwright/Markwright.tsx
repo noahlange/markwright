@@ -1,5 +1,6 @@
-import * as React from 'react';
-import { List } from 'react-virtualized';
+import fde from 'fast-deep-equal';
+import React from 'react';
+import { FixedSizeList as List } from 'react-window';
 import { parserFor, reactFor, ruleOutput } from 'simple-markdown';
 
 import Region from './lib/Region';
@@ -7,94 +8,124 @@ import Section from './lib/Section';
 import modifyAST from './markdown/ast';
 import rules from './markdown/rules';
 
-type HighlightFn = (content: string, lang: string) => Promise<string>;
+export type HighlightFn = (content: string, lang: string) => Promise<string>;
 
 type MarkwrightProps = {
+  context: object;
   manual?: boolean;
-  regions: Section[];
-  highlight: HighlightFn;
+  virtualized?: boolean;
+  regions: Region[];
+  highlight?: HighlightFn;
   flowed: boolean;
   value: string;
   columns: number;
-  page?: {
+  container: {
+    height: number;
+    width: number;
+  };
+  page: {
     width: number;
     height: number;
   };
   onFlow(a: Section[]): void;
 };
 
-function pageRenderer(paper, sections, r) {
+type MarkwrightState = {
+  content: string;
+  context: object;
+  containerHeight: number;
+  containerWidth: number;
+  flowed: boolean;
+  regions: Region[];
+  style: string;
+};
+
+function pageRenderer(sections: ISectionNode[], r: $AnyFixMe) {
   const output = ruleOutput(r, 'react');
   const render = reactFor(output);
-  return ({ key, index, style }) => {
+  return ({ index, style }: { index: number; style: React.CSSProperties }) => {
     let count = 0;
     const section = sections.find(s => (count += s.content.length) > index);
-    const page = section.content[index - count + section.content.length];
-    return (
-      <div
-        key={key}
-        style={{
-          ...style,
-          left: (window.innerWidth - paper.width) / 2,
-          marginBottom: 32,
-          top: style.top + 64,
-        }}
-      >
-        {render(page)}
-      </div>
-    );
+    if (section) {
+      const page = section.content[index - count + section.content.length];
+      const top = style.top ? +style.top : 0;
+      return (
+        <div style={{ ...style, top: top + index * 32 }}>{render(page)}</div>
+      );
+    }
+    return <div />;
   };
 }
 
-export default class Markwright extends React.Component<MarkwrightProps, any> {
-  public static ref: HTMLDivElement;
-  public static rules: any;
+export default class Markwright extends React.Component<
+  MarkwrightProps,
+  MarkwrightState
+> {
+  public static ref: HTMLDivElement | null;
 
-  public static react(
+  public static render(
     content: string,
-    regions?: any[],
+    context: object,
+    page: { width: number; height: number },
+    container: { width: number; height: number },
+    regions?: Section[],
     columns?: number,
-    highlight?: HighlightFn,
-    page?: { width: number; height: number }
+    highlight?: HighlightFn
   ) {
-    const r = this.rules ? this.rules : (this.rules = rules({ highlight }));
+    const r = rules({ highlight, context });
     const parser = parserFor(r);
     const tree = parser(content);
     const sections = modifyAST(tree, regions, columns);
     const pages = sections.reduce((a, b) => a + b.content.length, 0) || 1;
-    const width = this.ref ? this.ref.clientWidth : window.innerWidth;
-    const height = this.ref ? this.ref.clientHeight : window.innerHeight;
     return (
-      <div className="section">
+      <div className="sections" style={{ width: page.width }}>
         <List
-          width={width}
-          height={height}
-          rowHeight={page.height + 64}
-          rowCount={pages}
-          rowRenderer={pageRenderer(page, sections, r)}
-        />
+          width={container.width}
+          height={container.height}
+          itemSize={page.height}
+          itemCount={pages}
+        >
+          {pageRenderer(sections, r)}
+        </List>
       </div>
     );
   }
 
-  public static getDerivedStateFromProps(props: MarkwrightProps, state) {
-    if (props.value !== state.content) {
-      return {
-        content: props.value,
-        flowed: false,
-        regions: []
-      };
-    } else if (props.flowed) {
-      return { flowed: true, regions: props.regions };
+  public static getDerivedStateFromProps(
+    props: MarkwrightProps,
+    state: MarkwrightState
+  ) {
+    const next: Partial<MarkwrightState> = {};
+
+    if (!fde(props.context, state.context)) {
+      next.context = props.context;
     }
-    return null;
+    if (
+      props.container.width !== state.containerWidth ||
+      props.container.height !== state.containerHeight
+    ) {
+      next.containerHeight = props.container.height;
+      next.containerWidth = props.container.width;
+    }
+
+    if (props.value !== state.content) {
+      next.content = props.value;
+      next.flowed = false;
+      next.regions = [];
+    } else if (props.flowed) {
+      next.flowed = true;
+      next.regions = props.regions;
+    }
+
+    return Object.keys(next).length ? { ...state, ...next } : null;
   }
 
   public static flow(manual?: boolean): Section[] {
     const sections: Section[] = [];
     // approximate additional height of the footnote block, sans footnotes.
     const FOOTNOTE_BLOCK_HEIGHT = 48;
-    for (const page of this.ref.querySelectorAll('.page')) {
+    const pages = this.ref ? this.ref.querySelectorAll('.page') : [];
+    for (const page of pages) {
       const section = new Section();
       // should only be one page / column for an unflowed section
       const column = page.querySelector('.column') as HTMLElement;
@@ -127,7 +158,10 @@ export default class Markwright extends React.Component<MarkwrightProps, any> {
   }
 
   public state = {
+    containerHeight: this.props.container.height,
+    containerWidth: this.props.container.width,
     content: this.props.value,
+    context: this.props.context,
     flowed: false,
     regions: [],
     style: `
@@ -157,13 +191,17 @@ export default class Markwright extends React.Component<MarkwrightProps, any> {
       >
         {/* insert additional styles that should not be overridden */}
         <style type="text/css">{this.state.style}</style>
-        {Markwright.react(
-          // @todo - hack to stop the page from disappearing.
+        {Markwright.render(
           this.state.content || ' ',
+          this.state.context,
+          this.props.page,
+          {
+            height: this.state.containerHeight,
+            width: this.state.containerWidth
+          },
           this.state.regions,
           this.props.columns,
-          this.props.highlight,
-          this.props.page
+          this.props.highlight
         )}
       </div>
     );

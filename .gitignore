@@ -1,2 +1,4 @@
 node_modules
-src/regions
+docs/types
+src/example/types
+types/example

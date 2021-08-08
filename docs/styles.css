@@ -1,62 +1,22 @@
 :root {
-  --sans-stack: "Spectral", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol';
-  --serif-stack: "Playfair Display";
+  --sans-stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   --mono-stack: 'Fira Code', 'Fira Mono', Inconsolata, monospace;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar,
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-thumb {
+  background-color: transparent;
 }
 
 html {
   font-family: var(--sans-stack);
+  font-weight: 300;
   color: #111;
   background-attachment: fixed;
-  background-color: hsl(0, 0%, 97.5%);
-}
-
-.mw {
-  top: 1rem;
-}
-
-#editor {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  height: calc(100vh - 4rem);
-  width: calc(100vw - 8.5in - 8rem);
-  top: 2rem;
-  right: 2rem;
-}
-
-#editors {
-  display: flex;
-  flex: 1 0 auto;
-  flex-direction: row;
-}
-
-#editor textarea {
-  font-size: 13px;
-  font-family: var(--mono-stack);
-  flex: 1 0 auto;
-  padding: 1rem;
-  border: 1px solid lightgrey;
-  box-shadow: 0 0 5px rgba(0,0,0,0.15) inset;
-}
-
-#editor > textarea:focus {
-  outline: none;
-}
-
-#editor > div > h1 {
-  margin-top: 0;
-  font-size: 7.5rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 3px solid black;
-  font-family: var(--serif-stack);
-}
-
-#editor > div > p {
-  font-size: 17px;
-  line-height: 1.5;
-  font-family: var(--sans-stack);
+  background-color: #f2f2f2;
 }
 
 body > a {
@@ -68,34 +28,37 @@ body > a {
   z-index: 100;
 }
 
-@media (max-width: 960px) {
-  #react-root {
-    display: flex;
-    flex-direction: column-reverse;
-  }
-  .mw {
-    display: block;
-    margin: 0 auto;
-    position: static;
-  }
-  #editor {
-    width: 800px;
-    position: static;
-  }
-  #editor textarea {
-    height: calc(var(--page-width) / 2);
-    width: var(--page-width);
-  }
+#react-root {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.mw {
+  display: block;
+  margin: 0 auto;
+}
+
+pre {
+  background: #f2f2f2;
+  color: #333;
+  padding: 1rem;
+}
+
+p > code {
+  font-size: 95%;
+  background: #f2f2f2;
+  padding: 0.2ch 0.5ch;
 }
 
 pre > code {
-	background: none;
-	font-family: var(--mono-stack);
-	text-align: left;
-	white-space: pre;
-	word-spacing: normal;
-	word-break: normal;
-	word-wrap: normal;
-	line-height: 1.5;
+  font-family: var(--mono-stack);
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  font-size: 95%;
   tab-size: 2;
 }

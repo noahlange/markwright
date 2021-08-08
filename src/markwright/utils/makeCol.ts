@@ -1,7 +1,7 @@
-export default function makeCol(id: string, nodes: any[]) {
+export default function makeCol(id: string, nodes: AnyNode): IColNode {
   return {
-    content: nodes,
+    content: [nodes],
     id,
-    type: 'mw-column',
+    type: 'mw-column'
   };
 }

@@ -35,7 +35,7 @@ export default function Example(): JSX.Element {
   useEffect(() => setY(0), [doc, style]);
 
   useEffect(() => {
-    fetch(`/${doc}`)
+    fetch(doc)
       .then(res => res.text())
       .then(text => setText(text));
   }, [doc]);

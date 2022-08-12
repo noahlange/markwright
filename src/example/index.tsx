@@ -20,9 +20,9 @@ const styles = {
 };
 
 const docs = {
-  'README.md': 'Markwright Readme',
-  'moby-dick.md': 'Moby-Dick',
-  'the-great-gatsby.md': 'The Great Gatsby'
+  '/markwright/assets/README.md': 'Markwright Readme',
+  '/markwright/assets/moby-dick.md': 'Moby-Dick',
+  '/markwright/assets/the-great-gatsby.md': 'The Great Gatsby'
 };
 
 export default function Example(): JSX.Element {
@@ -46,7 +46,7 @@ export default function Example(): JSX.Element {
         className="preview"
         onWheel={e => setY(val => Math.min(0, val - e.deltaY / 2))}
       >
-        <div className={`wrapper`} style={{ transform: `translateY(${y}px)` }}>
+        <div className="wrapper" style={{ transform: `translateY(${y}px)` }}>
           <Markwright className={style} value={text} />
         </div>
       </div>

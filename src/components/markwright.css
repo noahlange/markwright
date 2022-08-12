@@ -1,0 +1,117 @@
+:root {
+  --page-height: 11in;
+  --page-width: 8.5in;
+
+  --margin-inner: 0.5in;
+  --margin-outer: 0.5in;
+  --margin-top: 0.5in;
+  --margin-bottom: 0.5in;
+
+  --border-color: rgba(0, 0, 0, 0.01);
+
+  --inner-width: calc(
+    var(--page-width) - var(--margin-inner) - var(--margin-outer)
+  );
+
+  --inner-height: calc(
+    var(--page-height) - (var(--margin-top) * 2) - (var(--margin-bottom) * 2)
+  );
+}
+
+.mw-break-col {
+  break-after: column;
+}
+
+.page {
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: var(--page-height);
+  width: var(--page-width);
+  padding-top: var(--margin-top);
+  padding-bottom: var(--margin-bottom);
+}
+
+.page.odd {
+  padding-right: var(--margin-inner);
+  padding-left: var(--margin-outer);
+}
+
+.page.even {
+  padding-right: var(--margin-outer);
+  padding-left: var(--margin-inner);
+}
+
+.page.odd footer,
+.page.odd header {
+  text-align: left;
+}
+
+.page.even footer,
+.page.even header {
+  text-align: right;
+}
+
+.body {
+  flex: 1 0 auto;
+}
+
+.content {
+  column-count: 1;
+}
+
+.footnote {
+  display: none;
+}
+
+.footnotes .footnote {
+  display: block;
+}
+
+thead th,
+hr {
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+}
+
+thead th,
+td {
+  padding: 0.25rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 0.5rem;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+/*
+ * Grandchildren with margins give their parents misleading sizes. This tends to
+ * break pagination.
+ */
+.content > * > * {
+  margin: 0;
+}
+
+ul {
+  padding-left: 2ch;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  max-height: var(--inner-height);
+  flex: 1 0 auto;
+}

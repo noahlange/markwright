@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500');
+
+$base: 'https://edwardtufte.github.io/tufte-css/et-book';
+
+/* Import ET Book styles
+   adapted from https://github.com/edwardtufte/et-book/blob/gh-pages/et-book.css */
+
+@font-face {
+  font-family: 'et-book';
+  src: url('#{$base}/et-book-roman-line-figures/et-book-roman-line-figures.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'et-book';
+  src: url('#{$base}/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'et-book';
+  src: url('#{$base}/et-book-bold-line-figures/et-book-bold-line-figures.woff')
+    format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'et-book-roman-old-style';
+  src: url('#{$base}/et-book-roman-old-style-figures/et-book-roman-old-style-figures.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

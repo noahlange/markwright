@@ -1,2 +1,4 @@
+
 node_modules
-src/regions
+types
+.DS_Store

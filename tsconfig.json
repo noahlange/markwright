@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "es2015",
+    "target": "esnext",
+    "module": "esnext",
     "moduleResolution": "node",
-    "jsx": "react",
-    // "strict": true,
-    "noUnusedParameters": true,
-    "noUnusedLocals": true
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "importsNotUsedAsValues": "error",
+    "declaration": true,
+    "declarationDir": "types"
   },
-  "include": [
-    "src/**/*.ts"
-  ]
+  "include": ["src"]
 }

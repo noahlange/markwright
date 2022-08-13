@@ -26,7 +26,7 @@ const docs = {
 };
 
 export default function Example(): JSX.Element {
-  const [doc, setDoc] = useState(Object.keys(docs)[0]);
+  const [doc, setDoc] = useState('');
   const [style, setStyle] = useState(Object.keys(styles)[0]);
   const [text, setText] = useState('');
   const [y, setY] = useState(0);
@@ -35,9 +35,13 @@ export default function Example(): JSX.Element {
   useEffect(() => setY(0), [doc, style]);
 
   useEffect(() => {
-    fetch(doc)
-      .then(res => res.text())
-      .then(text => setText(text));
+    if (doc) {
+      fetch(doc)
+        .then(res => res.text())
+        .then(text => setText(text));
+    } else {
+      setText('');
+    }
   }, [doc]);
 
   return (

@@ -10,12 +10,11 @@ import type {
 import { defaultRules } from 'simple-markdown';
 
 import { blockRender, idParse, idRender } from '../utils';
-
 import mwBlock from './block';
 import mwBreak from './break';
-import { paragraph, blockQuote, heading } from './misc';
-import { mw, mwPage, mwHeader, mwFooter } from './page';
 import { mwFootnote, mwFootnotes } from './footnotes';
+import { blockQuote, heading, paragraph } from './misc';
+import { mw, mwFooter, mwHeader, mwPage } from './page';
 import mwSection from './section';
 
 const outputRules = {

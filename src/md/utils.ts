@@ -31,6 +31,16 @@ export function reach(
   }
 }
 
+export function getNodes(type: string, ast: ASTNode): SingleASTNode[] {
+  const nodes: SingleASTNode[] = [];
+  reach(ast, node => {
+    if (node.type === type) {
+      nodes.push(node);
+    }
+  });
+  return nodes;
+}
+
 export function blockRender(
   tag: string = 'div',
   className?: string

@@ -1,11 +1,12 @@
 (global as any).IS_REACT_ACT_ENVIRONMENT = true;
 
 import { describe, expect } from '@jest/globals';
-import { outputFor, parserFor } from 'simple-markdown';
-import { getParserRules, getRenderRules } from '../../md/rules';
-import { hasNodes } from '../helpers/ast';
 import { createRoot } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
+import { outputFor, parserFor } from 'simple-markdown';
+
+import { getParserRules, getRenderRules } from '../../md/rules';
+import { hasNodes } from '../helpers/ast';
 
 const container = document.createElement('div');
 const root = createRoot(container);

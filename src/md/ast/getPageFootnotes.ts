@@ -1,6 +1,6 @@
 import type { SingleASTNode } from 'simple-markdown';
 
-import { getNodes } from '../../tests/helpers/ast';
+import { getNodes } from '../utils';
 
 export interface FootnoteData {
   number: number;
